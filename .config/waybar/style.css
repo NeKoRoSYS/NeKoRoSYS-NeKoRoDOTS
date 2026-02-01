@@ -1,0 +1,135 @@
+@import url('/home/nekorosys/.cache/wal/colors-waybar.css');
+@define-color background transparent;
+
+
+* {
+    font-size: 16px;
+    font-weight: bold;
+    font-family: JetBrains Mono Nerd Font;
+    color: @color1;
+}
+
+window#waybar {
+    all: unset;
+    background-color: @background;
+    color: @color1;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    margin-top: 10px;
+    margin-bottom: -10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: none;
+    padding: 10px;
+}
+
+.modules-center {
+    min-width: 150.5px;
+}
+
+tooltip {
+    color: @color7;
+    background-color: @color1;
+}
+
+#custom-kitty:hover,
+#custom-control:hover,
+#custom-gimp:hover,
+#custom-dolphin:hover,
+#custom-code:hover,
+#custom-firefox:hover,
+#clock:hover,
+#bluetooth:hover,
+#network:hover,
+#custom-cpu:hover,
+#custom-memory:hover,
+#custom-gpu:hover,
+#custom-colorpicker:hover,
+#custom-power:hover,
+#wireplumber:hover {
+    transition: all 0.3s ease;
+    color: @color7;
+}
+
+#workspaces {
+    padding: 0px 5px;
+}
+
+#workspaces button {
+    all: unset;
+    margin: 0px 6px;
+    padding: 0px 4px;
+    background: @color7;
+    border-radius: 50%;
+    transition: all 0.3s;
+    min-width: 15px;
+}
+
+#workspaces button:hover {
+    background: @color1;
+}
+
+#workspaces button.active {
+    border: none;
+    border-radius: 10px;
+    background: @color1;
+    min-width: 30px;
+}
+
+#workspaces button:hover label,
+#workspaces button.active label {
+    color: @color7;
+}
+
+#group-expand {
+    padding: 0px 5px;
+    transition: all 0.3s ease;
+}
+
+#battery {
+    color: @color7;
+    padding: 0 10px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+#battery:hover {
+    color: @color7;
+}
+
+#custom-expand {
+    padding: 0px 5px;
+    color: @color7;
+    transition: all 0.3s ease;
+}
+
+#custom-expand:hover {
+    color: @color7;
+}
+
+#custom-colorpicker,
+#custom-cpu,
+#custom-memory,
+#custom-gpu,
+#wireplumber,
+#bluetooth,
+#network,
+#custom-power,
+#clock,
+#custom-kitty,
+#custom-control,
+#custom-gimp,
+#custom-dolphin,
+#custom-code,
+#custom-firefox {
+    padding: 0px 5px;
+    color: @color7;
+    transition: all 0.3s ease;
+}
+
+#custom-endpoint {
+    color: transparent;
+}
