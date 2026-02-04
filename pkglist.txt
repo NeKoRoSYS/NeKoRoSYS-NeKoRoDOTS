@@ -1,22 +1,91 @@
-dolphin
-fastfetch
-firefox
-hypridle
-hyprland
-hyprlauncher
-hyprlock
-hyprpaper
-hyprpolkitagent
-kitty
-mako
-nano
-python-pip
-python-pywal16
-ttf-jetbrains-mono
-ttf-jetbrains-mono-nerd
-tty-clock-git
-waybar
-wl-clipboard
-wofi
-xdg-desktop-portal-hyprland
-zsh
+base 3-2
+base-devel 1-2
+bluez 5.85-1
+bluez-utils 5.85-1
+btop 1.4.6-1
+cava 0.10.7-1
+cjson 1.7.19-1
+cliphist 1:0.7.0-1
+cmake 4.2.3-1
+discord 1:0.0.123-1
+dolphin 25.12.1-1
+earlyoom 1.9.0-1
+efibootmgr 18-3
+fastfetch 2.58.0-1
+firefox 147.0.2-1
+flatpak 1:1.16.3-1
+gamemode 1.8.2-1
+git 2.53.0-1
+grim 1.5.0-2
+grub 2:2.14-1
+gst-plugin-pipewire 1:1.4.10-1
+hwinfo 25.0-2
+hypridle 0.1.7-6
+hyprland 0.53.3-1
+hyprlock 0.9.2-8
+hyprpolkitagent 0.1.3-4
+inetutils 2.7-2
+intel-gpu-tools 2.3-2
+intel-media-driver 25.3.4-1
+intel-ucode 20251111-1
+jq 1.8.1-1
+kitty 0.45.0-4
+less 1:691-1
+lib32-gamemode 1.8.2-1
+lib32-nvidia-580xx-utils 580.126.09-1
+libpulse 17.0+r98+gb096704c0-1
+libva-intel-driver 2.4.1-5
+libva-nvidia-driver 0.0.15-1
+libva-utils 2.22.0-1
+linux 6.18.7.arch1-1
+linux-firmware 20260110-1
+linux-headers 6.18.7.arch1-1
+mako 1.10.0-1
+meson 1.10.1-1
+mpvpaper 1.8-1
+mtools 1:4.0.49-1
+nano 8.7-1
+networkmanager 1.54.3-1
+noto-fonts-emoji 1:2.051-1
+ntfs-3g 2022.10.3-2
+nvidia-580xx-dkms 580.126.09-1
+nvidia-580xx-settings 580.126.09-1
+nvidia-prime 1.0-5
+openssh 10.2p1-2
+optimus-manager-qt 1.6.9-3
+os-prober 1.83-1
+pacman-contrib 1.13.1-1
+piper 0.8-3
+pipewire 1:1.4.10-1
+pipewire-alsa 1:1.4.10-1
+pipewire-jack 1:1.4.10-1
+pipewire-pulse 1:1.4.10-1
+power-profiles-daemon 0.30-1
+python-pip 25.3-3
+python-pywal16 1:3.8.13-1
+qt6-virtualkeyboard 6.10.2-1
+sddm 0.21.0-6
+smartmontools 7.5-1
+socat 1.8.1.0-1
+spotify 1:1.2.79.427-1
+steam 1.0.0.85-1
+sudo 1.9.17.p2-2
+swww 0.11.2-1
+tlp 1.9.0-3
+ttf-jetbrains-mono 2.304-2
+ttf-jetbrains-mono-nerd 3.4.0-2
+tty-clock-git 1:2.3.r40.f2f847c-2
+unzip 6.0-23
+vulkan-tools 1.4.335.0-1
+waybar 0.14.0-6
+wine 11.1-2
+wireplumber 0.5.13-1
+wl-clipboard 1:2.2.1-3
+wofi 1.5.3-1
+wpa_supplicant 2:2.11-5
+xdg-desktop-portal-gtk 1.15.3-1
+xdg-desktop-portal-hyprland 1.3.11-3
+yay 12.5.7-1
+yay-debug 12.5.7-1
+zram-generator 1.2.1-1
+zsh 5.9-5

@@ -1,0 +1,13 @@
+com.obsproject.Studio
+org.freedesktop.Platform.GL.default
+org.freedesktop.Platform.GL.default
+org.freedesktop.Platform.GL.default
+org.freedesktop.Platform.GL.default
+org.freedesktop.Platform.VAAPI.Intel
+org.freedesktop.Platform.VAAPI.Intel
+org.freedesktop.Platform.codecs-extra
+org.freedesktop.Platform.openh264
+org.gnome.Platform
+org.kde.KStyle.Adwaita
+org.kde.Platform
+org.vinegarhq.Sober
