@@ -1,0 +1,96 @@
+@import url('/home/nekorosys/.cache/wal/colors-waybar.css');
+
+/* Global styles */
+window {
+  margin: 0px;
+  border: 2px solid @color7;
+  border-radius: 10px;
+  background-color: @color0;
+  font-family: JetBrains Mono, monospace;
+  color: @color7;
+}
+
+/* Input box */
+#input {
+  margin: 5px;
+  border: 1px solid @color7;
+  color: @color3;
+  background-color: @color0;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+#input::placeholder {
+  color: @color7;
+}
+
+#input:focus {
+  color: @color7;
+}
+
+#input prompt {
+  color: @color7;
+}
+
+#input image {
+  color: @color7;
+}
+
+#prompt {
+  color: @color7;
+}
+
+/* Inner box */
+#inner-box {
+  margin: 5px;
+  border: none;
+  color: @color7;
+  padding: 0px;
+}
+
+/* Outer box */
+#outer-box {
+  margin: 5px;
+  border: none;
+  padding: 5px;
+}
+
+/* Scroll area */
+#scroll {
+  margin: 0px;
+}
+
+/* Text styling */
+#text {
+  margin: 5px;
+  border: none;
+  color: @color7;
+  font-size: 14px;
+}
+
+#entry.activatable #text {
+  color: @color7;
+}
+
+#entry > * {
+  color: @color7;
+}
+
+/* Active entry */
+#entry:selected {
+  background-color: @color8;
+  border-radius: 5px;
+}
+
+#entry:selected #text {
+  font-weight: bold;
+  color: @color7;
+}
+
+#entry:hover {
+  background-color: @color10;
+}
+
+#entry:hover #text {
+  color: @color11;
+}

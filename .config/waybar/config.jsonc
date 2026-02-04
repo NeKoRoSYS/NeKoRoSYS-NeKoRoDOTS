@@ -1,0 +1,78 @@
+{
+    "layer": "top",
+    "position": "top",
+    "reload_style_on_change": true,
+    "modules-left": ["clock","wireplumber"],
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": ["custom/kitty" , "custom/control" , "custom/dolphin" , "custom/code" , "custom/firefox","bluetooth","network","battery","custom/power"],
+
+    "battery": {
+        "format": "{capacity}% ",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "tooltip": true,
+        "interval": 30,
+        "exec": "cat /sys/class/power_supply/BAT0/capacity"
+    },
+
+    "hyprland/workspaces": {
+        "persistent-workspaces": {
+            "*": [ 1,2,3,4,5 ]
+        }
+    },
+
+    "custom/kitty":{
+        "format":"",
+        "on-click":"kitty"
+    },
+
+    "custom/control":{
+        "format":"  ",
+        "on-click":"control"
+    },
+    "custom/dolphin":{
+        "format":"  ",
+        "on-click":"dolphin"
+    },
+    "custom/code":{
+        "format":"  ",
+        "on-click":"code"
+    },
+    "custom/firefox":{
+        "format":"    ┃",
+        "on-click":"firefox"
+    },
+    
+
+    "wireplumber":{
+        "format":"  {volume}%",
+        "format-muted":" {volume}%",
+        "tooltip":false,
+        "on-click":"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    },
+
+    "custom/power": {
+        "format": " ",
+        "on-click":"shutdown -h now"
+    },
+
+    "clock": {
+        "format": " {:%I:%M:%S %p}",
+        "interval": 1,
+        "tooltip":false
+    },
+    "network": {
+        "format-wifi": " ",
+        "on-click": "control --minimal --wifi",
+        "tooltip":false
+    },
+    "bluetooth": {
+        "format-on": "  ",
+        "on-click": "control --minimal --bluetooth",
+        "tooltip":false
+    },
+    "custom/expand": {
+        "format": "",
+        "tooltip": false
+    }
+} 
