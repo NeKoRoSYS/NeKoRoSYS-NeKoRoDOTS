@@ -52,14 +52,12 @@ pip install haishoku colorthief --break-system-packages 2>/dev/null || pip insta
 
 # 5. Create necessary directory structure
 echo -e "${BLUE}Creating directory structure...${NC}"
-mkdir -p ~/Downloads
 mkdir -p ~/.config
 
 # 6. Copy everything to the Home directory
 # This copies the .config folder and the Downloads folder
 echo -e "${BLUE}Deploying configuration files and wallpapers...${NC}"
 cp -rv .config ~/
-cp -rv Downloads ~/
 
 # 7. Set executable permissions for scripts
 # Ensures wallpaper and lock scripts can run
@@ -69,6 +67,7 @@ chmod +x ~/.config/hypr/scripts/wallpapers/*.sh 2>/dev/null
 echo -e "${BLUE}Enabling waybar...${NC}"
 sudo systemctl enable ~/.config/systemd/user/waybar.service
 echo -e "${GREEN}Installation complete!${NC}"
+
 
 
 
