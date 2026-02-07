@@ -1,6 +1,8 @@
 # NeKoRoSYS's Arch Dotfiles
 Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I initially made this repo because installing Invincible Dots didn't seem to work. Hence, I rebuilt it from the ground up using a lot of the repo's already-working parts so that it works with Hyprland's later versions. Why this fork stands out, you may ask? I added my own flavor to it, such as the support for video wallpapers; a couple of bug fixes at the keybinds config file (specifically, the bug that lets you open infinite instances of wofi which is very unoptimal); and a lot more!
 <br>
+![Screenshot](image.png)
+<br>
 <br>
 ## Features
 - **One-tap Installer Script**
