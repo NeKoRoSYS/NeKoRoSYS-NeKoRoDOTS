@@ -8,6 +8,7 @@ SKIN_DIR="$HOME/.config/waybar/skins"
 MAIN_CONFIG="$HOME/.config/waybar/config.jsonc"
 MAIN_STYLE="$HOME/.config/waybar/style.css"
 
+notify-send -a "Waybar" -h string:x-canonical-private-synchronous:waybar "Waybar" "Select a waybar skin."
 # Get list of skins
 CHOICE=$(ls "$SKIN_DIR" | wofi --dmenu --prompt "Select Waybar Skin")
 
