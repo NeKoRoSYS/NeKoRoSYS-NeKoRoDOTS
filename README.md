@@ -3,11 +3,13 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I 
 <br>
 <br>
 
+
+| 📌 **Table of Contents** |
 | :---: |
-| Table of Contents |
-| [Dependencies](#dependencies) |
-| [Features](#features) |
-| [Notes](#notes) |
+| [🔗 Dependencies](#dependencies) |
+| [🚀 Features](#features) |
+| [📝 Notes](#notes) |
+
 <br>
 <br>
 
