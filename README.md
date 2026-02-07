@@ -3,13 +3,11 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I 
 <br>
 <br>
 
-
 | 📌 **Table of Contents** |
 | :---: |
 | [🔗 Dependencies](#dependencies) |
 | [🚀 Features](#features) |
 | [📝 Notes](#notes) |
-<br>
 
 ## Dependencies
 - Auto-pause animated wallpapers via [mpvpaper-stop](https://github.com/pvtoari/mpvpaper-stop) (dependencies: cmake, cjson)
