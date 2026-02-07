@@ -5,7 +5,9 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I 
 <br>
 ![Screenshot](image.png) 
 <br>
+<br>
 ![Screenshot](image-3.png) 
+<br>
 <br>
 ![Screenshot](image-2.png) 
 <br>
