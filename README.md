@@ -51,7 +51,7 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots).
 <br>
 
 ## Optional
-Mostly just personal notes in case I switch over to another PC.
+Mostly personal notes just in case I switch over to another PC.
 - Use [MineGrub](https://github.com/Lxtharia/minegrub-world-sel-theme) theme for Grub.
 - Identify GPU names.
 - `/etc/modprobe.d/nvidia.conf`
