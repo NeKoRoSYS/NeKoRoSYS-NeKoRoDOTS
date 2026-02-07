@@ -48,6 +48,7 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots).
 ## TODO
 - Improve Hyprlock UI
 - Add `slurp` support for grim
+- Add notifications for specific actions
 <br>
 
 ## Optional
