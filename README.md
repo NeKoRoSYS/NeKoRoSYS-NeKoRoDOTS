@@ -9,7 +9,7 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I 
 | :---: |
 | [🔗 Dependencies](#dependencies) |
 | [🚀 Features](#features) |
-| [🔨 Waybar Skins](#waybar-skins) |
+| [🔨 Skins and Layouts](#skins-and-layouts) |
 | [📝 Notes](#notes) |
 | [📋 TODO](#todo) |
 
@@ -71,6 +71,11 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I 
     - Modern and minimalistic.
     - Beautiful design.
   - And the best part? You can add your own!
+- **Select Hyprlock Layouts**
+  - Legacy
+    - Simple and functional.
+    - Credits to [justinmdickey](https://github.com/justinmdickey/publicdots/blob/main/.config/hypr/hyprlock.conf) for the layout.
+  - And the best part? You can add your own!
 <br>
 
 ## Notes
@@ -78,11 +83,11 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I 
   - `start-dashboard.sh` creates a grid layout for a 1920x1080 display, however I also provided a 1280x720 version of the dashboard in `~/.config/hypr/windowrules.conf/`.
 <br>
 
-## Waybar Skins
-Make sure to analyze the directory structure of `~/.config/waybar/skins` and how the files (`config.jsonc`, `colors.css`, `style.css`, `layout.jsonc`, `modules.jsonc`) include or import from each other.
+## Skins and Layouts
+Make sure to analyze the directory structure of `~/.config/waybar/skins` and `~/.config/hypr/hyprlock/`; and how the files (`hyprlock.conf`, `config.jsonc`, `colors.css`, `style.css`, `layout.jsonc`, `modules.jsonc`) include or import from each other.
 
 You have two options:
-- Install someone else's Waybar setup and then manually adjust its files to correctly import or include; or
+- Install someone else's Waybar/Hyprlock setup and then manually adjust its files to correctly import or include; or
 - Make your own. ¯\_(ツ)_/¯
 <br>
 <br>
