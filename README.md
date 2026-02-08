@@ -17,6 +17,7 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I 
 
 > [!CAUTION]
 > **HARDWARE SPECIFIC CONFIGURATION**<br>
+> 
 > The "System Booting" section contains settings specifically optimized for a dual-GPU laptop (Intel 620/Nvidia 940MX). 
 > **Do not** copy the `GRUB_CMDLINE_LINUX_DEFAULT` or `mkinitcpio` modules unless you have identical hardware, as this may prevent your system from booting.
 
