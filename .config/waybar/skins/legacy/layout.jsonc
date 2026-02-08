@@ -1,0 +1,9 @@
+{
+    "layer": "top",
+    "position": "top",
+    "reload_style_on_change": true,
+    "modules-left": ["clock","wireplumber"],
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": ["custom/kitty" , "custom/control" , "custom/dolphin" , "custom/code" , "custom/firefox","custom/divider","bluetooth","network","battery","custom/power"],
+    "include": [ "~/.config/waybar/skins/legacy/modules.jsonc" ]
+}

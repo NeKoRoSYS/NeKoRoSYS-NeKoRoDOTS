@@ -1,0 +1,41 @@
+{
+    "layer" : "top",
+    "position" : "top",
+    "margin" : "5 0",
+
+    "group/gleft1" : {
+        "orientation": "horizontal",
+        "modules" : [
+            "battery", "cpu", "backlight" 
+        ]
+    },
+
+    "group/gleft2" : {
+        "orientation": "horizontal",
+        "modules" : [
+            "hyprland/workspaces", "hyprland/window"
+        ]
+    },
+
+
+    "group/gright1" : {
+        "orientation": "horizontal",
+        "modules" : [
+            "memory", "temperature", "tray"
+        ]
+    },
+
+    "group/gright2" : {
+        "orientation": "horizontal",
+        "modules" : [
+            "wireplumber", "bluetooth", "network"
+        ]
+    },
+
+    "reload_style_on_change": true,
+    "modules-left"   : ["power-profiles-daemon", "group/gleft1", "group/gleft2"],
+    "modules-center" : ["clock"],
+    "modules-right"  : [ "group/gright2", "group/gright1", "custom/ctlcenter"],
+
+    "include": [ "~/.config/waybar/skins/mkhmtcore/modules.jsonc" ]
+}

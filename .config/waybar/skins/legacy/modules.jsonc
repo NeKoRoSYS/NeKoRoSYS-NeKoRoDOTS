@@ -1,0 +1,90 @@
+{
+    "battery": {
+        "format": "{capacity}% ",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "tooltip": true,
+        "interval": 30,
+        "exec": "cat /sys/class/power_supply/BAT0/capacity"
+    },
+
+    "hyprland/workspaces": {
+        "persistent-workspaces": {
+            "*": [ 1,2,3,4,5 ]
+        }
+    },
+
+    "custom/power": {
+        "format" : "⏻ ",
+        "tooltip": false,
+        "menu": "on-click",
+        "menu-file": "~/.config/waybar/power_menu.xml",
+        "menu-actions": {
+	    "lock": "loginctl lock-session",
+	    "sleep": "systemctl suspend",
+            "shutdown": "systemctl poweroff",
+            "reboot": "systemctl reboot",
+	    "signout": "command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"
+        }
+    },
+
+    "custom/kitty":{
+        "format":" ",
+        "on-click":"kitty",
+        "tooltip":false
+    },
+    "custom/control":{
+        "format":"   ",
+        "on-click":"control",
+        "tooltip":false
+    },
+    "custom/dolphin":{
+        "format":"   ",
+        "on-click":"dolphin",
+        "tooltip":false
+    },
+    "custom/code":{
+        "format":"   ",
+        "on-click":"code",
+        "tooltip":false
+    },
+    "custom/firefox":{
+        "format":"   ",
+        "on-click":"firefox",
+        "tooltip":false
+    },
+    "custom/divider":{
+        "format":" ┃",
+        "tooltip":false
+    },
+    "wireplumber":{
+        "format":"󰕾 {volume}%",
+        "format-muted":"󰝟 {volume}%",
+        "tooltip":false,
+        "on-click":"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    },
+    "custom/lock": {
+        "format": " 󰌾",
+        "on-click":"hyprlock"
+    },
+
+    "clock": {
+        "format": " {:%I:%M:%S %p}",
+        "interval": 1,
+        "tooltip":false
+    },
+    "network": {
+        "format-wifi": " ",
+        "on-click": "control --minimal --wifi",
+        "tooltip":false
+    },
+    "bluetooth": {
+        "format-on": "  ",
+        "on-click": "control --minimal --bluetooth",
+        "tooltip":false
+    },
+    "custom/expand": {
+        "format": "",
+        "tooltip": false
+    }
+}
