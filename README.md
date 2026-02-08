@@ -103,6 +103,7 @@ You have two options:
 
 ## Optional
 Mostly personal notes just in case I switch over to another PC. Do NOT copy my Grub Linux CMDLINE and mkinitcpio modules unless you also have a laptop with old hybrid GPUs (Intel Graphics 620 and Nvidia GeForce 940mx).
+### System Booting
 - Use [MineGrub](https://github.com/Lxtharia/minegrub-world-sel-theme) theme for Grub.
 - Identify GPU names.
 - `/etc/modprobe.d/nvidia.conf`
@@ -117,8 +118,10 @@ Mostly personal notes just in case I switch over to another PC. Do NOT copy my G
   - `sudo grub-mkconfig -o /boot/grub/grub.cfg`
 - Modify `/etc/mkinitcpio.conf` (`MODULES` for GPU and `HOOKS` for `plymouth` after `base udev`)
   - `sudo mkinitcpio -P`
+### Boot Animations and Login
 - Use `plymouth` and `greetd` (`nwg-hello`)
-- Use `alsa-utils` and `noise-suppression-for-voice`
+### Fix Boosted Mic on OBS and Discord (pipewire)
+- Install `alsa-utils` and `noise-suppression-for-voice`
   - `wpctl status`
   - `alsamixer`
   - `sudo alsactl store`
