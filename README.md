@@ -102,7 +102,7 @@ You have two options:
 <br>
 
 ## Optional
-Mostly personal notes just in case I switch over to another PC.
+Mostly personal notes just in case I switch over to another PC. Do NOT copy my Grub Linux CMDLINE and mkinitcpio modules unless you also have a laptop with old hybrid GPUs (Intel Graphics 620 and Nvidia GeForce 940mx).
 - Use [MineGrub](https://github.com/Lxtharia/minegrub-world-sel-theme) theme for Grub.
 - Identify GPU names.
 - `/etc/modprobe.d/nvidia.conf`
