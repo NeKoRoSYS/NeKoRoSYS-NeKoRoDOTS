@@ -14,6 +14,8 @@ Based on [mkhmtolzhas' rice](https://github.com/mkhmtolzhas/Invincible-Dots). I 
 | [🔨 Skins and Layouts](#skins-and-layouts) |
 | [📝 Notes](#notes) |
 | [🤔 Optional](#optional) |
+| [💸 Sponsorship](#sponsorship) |
+| [🫂 Contribution](#contribution) |
 <br>
 
 ## Dependencies
