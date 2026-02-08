@@ -123,7 +123,7 @@ Mostly personal notes just in case I switch over to another PC.
   - `alsamixer`
   - `sudo alsactl store`
   - `nano ~/.config/pipewire/pipewire.conf.d/99-input-denoising.conf`
-    ```json
+    ```spa json
     context.modules = [
     {  name = libpipewire-module-filter-chain
        args = {
@@ -151,9 +151,9 @@ Mostly personal notes just in case I switch over to another PC.
               node.name   = "rnnoise_source"
               media.class = Audio/Source
               audio.rate   = 48000
-            }
           }
         }
+      }
     ]
     ```
   - `wpctl set-default microphoneID`
