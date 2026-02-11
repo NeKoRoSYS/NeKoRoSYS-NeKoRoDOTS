@@ -24,6 +24,7 @@ hyprlock
 hyprpicker
 hyprpolkitagent
 hyprshot
+hyprsunset
 jq
 kio-admin
 kitty
