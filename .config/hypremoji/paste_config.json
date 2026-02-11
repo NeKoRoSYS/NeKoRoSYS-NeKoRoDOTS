@@ -1,0 +1,17 @@
+{
+  "shift_paste_apps": [
+    "kitty",
+    "alacritty",
+    "foot",
+    "wezterm",
+    "terminator",
+    "tilix",
+    "gnome-terminal",
+    "konsole",
+    "xterm",
+    "urxvt",
+    "st",
+    "tmux",
+    "rio"
+  ]
+}

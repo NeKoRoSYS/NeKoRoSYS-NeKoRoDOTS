@@ -1,0 +1,21 @@
+background-color=#10192580
+text-color=#c3c5c8
+border-color=#aabfe2
+progress-color=#ede64c80
+
+# Font & Size
+font=JetBrains Mono 12
+
+# Border & Style
+border-radius=10
+
+
+# Timeout (in ms)
+default-timeout=5000
+
+# Transparency (works on some setups, needs compositor support)
+
+#
+#alpha=0.5  # Uncomment if using transparency (try adjusting from 0.5 to 1)
+
+# Urgency Levels

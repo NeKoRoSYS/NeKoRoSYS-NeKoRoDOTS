@@ -1,0 +1,131 @@
+@import "/home/nekorosys/.cache/wal/colors-waybar.css";
+
+/* Definition of variables */
+:root {
+  --primary-col: #4b60a5;
+  --primary-col-glow: #4b60a5aa;
+  --gray: #444;
+
+  --bg-col: #0F0F0F;
+  --input-text-col: #FFFFFF;
+  --btn-list-col: #181818;
+  --entry-unfocus: #c41313;
+  --btn-list-col-hover: #272727;
+  --btn-list-col-hover-glow: #27272777;
+  --btn-nav-col: #3E3E3E;
+  --btn-nav-col-hover: #0F0F0F;
+
+  --emoji-font: "Noto Color Emoji";
+}
+
+* {
+  outline: none;
+}
+
+window {
+  background-color: @background;
+  border-radius: 10px;
+  /* padding: 12px; */
+  padding: 12px 0px 0px 0px;
+}
+.generic-btn{
+  background: var(--btn-list-col);
+  /* margin: 0 20px; */
+  padding: 0 5px;
+  border-radius: 10px;
+}
+
+.generic-btn:hover{
+  background: var(--btn-list-col-hover);
+  animation: boing-ani 2s ease-in-out infinite;
+  border: 1px solid var(--gray);
+}
+
+@keyframes boing-ani {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pin-window-btn:hover {
+  border: 1px solid var(--gray);
+}
+
+.shot-animation {
+  animation: shot 1s ease-in-out forwards;
+}
+
+/* Mantener el hover incluso durante la animación de click */
+.generic-btn.shot-animation:hover {
+  background: var(--btn-list-col-hover);
+  animation: boing-ani 2s ease-in-out infinite, shot 1s ease-in-out forwards;
+}
+
+@keyframes shot {
+  0% {
+    border: 1px solid var(--primary-col);
+  }
+  50% {
+    border: 1px solid white;
+  }
+  100% {
+    border: 1px solid transparent;
+  }
+}
+
+entry {
+  background-color: var(--btn-list-col);
+  color: white;
+  border-radius: 10px;
+  padding: 0 15px;
+}
+
+.focused.active {
+  font-weight: 500;
+  box-shadow: 0 3px 7px 0 var(--primary-col-glow), 0 1px 2px -1px var(--primary-col-glow);
+  border: 1px solid var(--primary-col);
+
+}
+
+.focused.active:focus {
+  box-shadow: inset 0 0 0 1px var(--primary-col-glow);
+
+}
+
+.category_nav button {
+  background: var(--btn-list-col);
+  border: none;
+  padding: 1px 5px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+.category_nav button:hover, .category_nav button:focus {
+  background: var(--btn-list-col-hover);
+  box-shadow: 0 3px 7px 0 var(--btn-list-col-hover-glow), 0 1px 2px -1px var(--btn-list-col-hover-glow);
+}
+.nav_enabled button.active, .nav_enabled button.active:focus {
+  background: var(--primary-col);
+}
+.nav_enabled button.active, .nav_enabled button.active:hover, .nav_enabled button.active:focus {
+  box-shadow: 0 3px 7px 0 var(--primary-col-glow), 0 1px 2px -1px var(--primary-col-glow);
+}
+
+.emoji-item {
+  font-family: var(--emoji-font);
+  font-size: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid var(--btn-list-col);
+}
+
+.emoji-item:hover {
+  background-color: var(--btn-list-col);
+}
+.emoji-item:focus {
+  background-color: var(--btn-list-col-hover);
+}
