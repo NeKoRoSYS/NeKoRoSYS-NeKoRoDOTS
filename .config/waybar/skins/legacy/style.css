@@ -1,0 +1,176 @@
+@import "colors.css";
+
+* {
+    font-family: 'JetBrains Mono Nerd Font';
+	border: none;
+	border-radius: 0;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	text-shadow: none;
+}
+
+#waybar {
+    font-weight: 700;
+    background: transparent;
+    font-size: 12px;
+    color: @fg;
+    border-radius: 15px;
+    padding: 0 15px;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    margin-bottom: -10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+
+tooltip {
+    padding: 8px;
+    border-radius: 15px;
+    background: @tooltip-bg;
+}
+
+tooltip label {
+    padding: 8px;
+	font-weight: bold;
+}
+
+.popup * {
+    box-shadow: none;
+    outline: none;
+}
+
+#tray menu, menu {
+    background: @text-invert;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: @fg;
+}
+
+#custom-tray-icon {
+    color: @foreground;
+    padding: 0 10px;
+}
+
+#tray {
+    background: @background;
+    border: 1px solid @border;
+    border-radius: 8px;
+    padding: 2px 5px;
+}
+
+#tray-drawer:hover #custom-tray-icon {
+    color: @accent;
+}
+
+#tray menu > *, menu > * {
+    padding: 3px 0px;
+}
+
+#tray menu > *:hover, menu > *:hover{
+    border-radius: 10px;
+    background-color: @inactive;
+}
+
+/* global paddings */
+#backlight, #wireplumber, #network, #temperature,
+#bluetooth, #battery, #memory, #cpu, #load{
+    padding: 2px 7px;
+}
+
+#workspaces, #bluetooth, #battery, #memory, #temperature,
+#network, #wireplumber, #backlight, #cpu, #load {
+    background: transparent;
+    border-radius: 15px;
+    margin: 0 2px;
+} 
+
+#custom-start, #custom-logout, #gright1, #gleft1,
+#gright2, #gleft2, #custom-ctlcenter, #power-profiles-daemon {
+    padding: 2px 9px;
+    border-bottom: 2px solid @color5;
+    border-radius: 15px;
+    background: alpha(@background, 0.75);
+}
+
+#clock {
+    padding: 2px 18px;
+    border-radius: 15px;
+    border-bottom: 2px solid @color5;
+    background: alpha(@background, 0.75);
+}
+
+/* single icons cool size  */
+
+#gright2, #gleft2  {
+    margin: 0 8px;
+}
+
+#gleft1 {
+    margin: 0 0 0 8px;
+}
+
+#gright1 {
+    margin: 0 8px 0 0;
+}
+
+#memory.critical, #cpu.critical,
+#temperature.critical, #battery.critical,
+#network.disconnected{
+	color: @red;
+}
+
+#memory.warning, #cpu.warning,
+#temperature.warning, #battery.warning {
+	color: @yellow;
+}
+
+#workspaces button {
+    color: @workspace-fg;
+    font-size: 14px;
+    border-radius: 15px;
+    margin: 0 7px;
+}
+
+#workspaces button:hover {
+    background: transparent;
+}
+
+#mpris, #window {
+    margin: 0 5px;
+}
+
+#mpris.paused {
+    color: @inactive;
+}
+
+#custom-logout {
+    color: @red;
+    margin-right: 5px;
+    padding: 0 12px;
+}
+
+#custom-ctlcenter {
+    color: @blue;
+    margin-right: 5px;
+    padding: 0 12px;
+}
+
+#power-profiles-daemon {
+    margin-left: 5px;
+    padding: 0 12px;
+}
+
+#power-profiles-daemon.performance {
+    color: @red;
+}
+
+#power-profiles-daemon.power-saver {
+    color: @green;
+}
