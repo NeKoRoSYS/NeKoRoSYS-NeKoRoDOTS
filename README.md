@@ -82,6 +82,7 @@ NeKoRoDOTS focuses on simplicity and modularity.
 
 - **Advanced Customization**
   - Credits to [iyiolacak](https://github.com/iyiolacak/iyiolacak-swaync-config?tab=readme-ov-file), [justinmdickey](https://github.com/justinmdickey/publicdots/blob/main/.config/hypr/hyprlock.conf), and [mkhmtolzhas](https://github.com/mkhmtolzhas/mkhmtdots) for their amazing theming.
+    - **__This repo gives you have at most 2 pre-installed out-of-the-box layouts/styling for waybar, hyprlock, and SwayNC. The best part? You can make your own!__**
   - Switch to Dark and Light Mode
   - Select Waybar Skins
   - Select Wofi Skins
@@ -92,7 +93,6 @@ NeKoRoDOTS focuses on simplicity and modularity.
       - `mpvpaper` automatically stops if an app is on fullscreen mode to save CPU, RAM, or GPU space.
       - Paste image or video links with valid file extensions in the wofi prompt and the download will automatically be processed, saved, and set as your new wallpaper.
     - Border colors and UI elements have dynamic color schemes.
-  - **__This repo gives you have at most 2 pre-installed out-of-the-box layouts/styling for waybar, hyprlock, and SwayNC. The best part? You can make your own!__**
 <br>
 
 ![Screenshot](image.png) 
