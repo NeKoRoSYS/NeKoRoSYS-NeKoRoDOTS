@@ -4,7 +4,7 @@
 # NeKoRoDOTS 
 <br>
 
-![Screenshot](showcase/image-5.png) 
+![Screenshot](showcase/image.png) 
 <br>
 <br>
 
@@ -121,7 +121,7 @@ The following are what NeKoRoDOTS currently offers:
     - Border colors and UI elements have dynamic color schemes.
 <br>
 
-![Screenshot](showcase/image.png) 
+![Screenshot](showcase/image-5.png) 
 <br>
 <br>
 <br>
