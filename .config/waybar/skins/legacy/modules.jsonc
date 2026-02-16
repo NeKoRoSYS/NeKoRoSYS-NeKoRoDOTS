@@ -113,8 +113,8 @@
         "tooltip": true,
         "format-full": "",
         "format": "{icon} {capacity}%",
-        "format-time": "{H}:{M:02}",
-        "format-charging": " {capacity}% ({time})",
+        "format-time": "({H}:{M:02})",
+        "format-charging": " {capacity}% {time}",
         "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂂", "󰁹"],
         "states": {
             "warning": 30,
