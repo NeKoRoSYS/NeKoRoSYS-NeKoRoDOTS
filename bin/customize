@@ -3,31 +3,119 @@
 pkill -x wofi
 
 wallpaper="Select Wallpaper"
-waybar="Select Navbar Skin"
+navbar="Select Navbar Skin"
 launcher="Select Launcher Skin"
-lock="Select Lockscreen Layout"
+lockscreen="Select Lockscreen Layout"
 panel="Select Control Centre Layout"
-OPTIONS="$wallpaper\n$waybar\n$launcher\n$lock\n$panel"
+OPTIONS="$wallpaper\n$navbar\n$launcher\n$lockscreen\n$panel"
 
 CHOICE=$(echo -e "$OPTIONS" | wofi --dmenu --hide-scroll --lines 5 --cache-file /dev/null --prompt "Select Action")
 case "$CHOICE" in
 	"$wallpaper")
-		customize-feature wallpaper
+		FEATURE=wallpaper
+		MODE=""
 		;;
-	"$waybar")
-		customize-feature waybar
+	"$navbar")
+		FEATURE=navbar
 		;;
 	"$launcher")
-		customize-feature launcher
+		FEATURE=launcher
 		;;
-	"$lock")
-		customize-feature lock
+	"$lockscreen")
+		FEATURE=lockscreen
 		;;
 	"$panel")
-		customize-feature panel
+		FEATURE=panel
 		;;
 	*)
 		exit 1
 		;;
 esac
 
+HYPR="$HOME/.config/hypr/configs/windowrules.conf"
+
+case $FEATURE in
+    lockscreen)
+        SKIN_DIR="$HOME/.config/hypr/hyprlock/skins"
+        MAIN="$HOME/.config/hypr/hyprlock.conf"
+        
+        makenotif customize preferences-desktop-theme Lockscreen "Select a lockscreen layout." true
+        
+        CHOICE=$(ls "$SKIN_DIR" | grep '\.conf$' | wofi --dmenu --prompt "Select Lockscreen Layout")
+
+        if [ -n "$CHOICE" ]; then
+            echo "source = $SKIN_DIR/$CHOICE" > "$MAIN"
+            makenotif customize preferences-desktop-theme Lockscreen "Layout changed to: ${CHOICE%.conf}" true
+        fi
+        ;;
+        
+    wallpaper)
+        SCRIPT_DIR="$HOME/.config/hypr/scripts/wallpapers"
+        if [ "$MODE" == "random" ]; then
+            "$SCRIPT_DIR/set-random.sh" &
+        else
+            "$SCRIPT_DIR/set-wallpaper.sh" &
+            makenotif customize folder-pictures Wallpaper "Select a new background." true
+        fi
+        ;;
+
+    launcher|panel|navbar)
+        case $FEATURE in
+            launcher)
+                NAME="Launcher"
+                ICON="preferences-desktop-theme"
+                MSG="Select a launcher skin."
+                DIR="$HOME/.config/wofi/skins"
+                CONFIG="$HOME/.config/wofi/config.json"
+                STYLE="$HOME/.config/wofi/style.css"
+                ;;
+            panel)
+                NAME="Control Centre"
+                ICON="preferences-desktop-theme"
+                MSG="Select Control Centre style."
+                DIR="$HOME/.config/swaync/skins"
+                CONFIG="$HOME/.config/swaync/config.json"
+                STYLE="$HOME/.config/swaync/style.css"
+                ;;
+            navbar)
+                NAME="Navbar"
+                ICON="preferences-desktop-theme"
+                MSG="Select a navbar skin."
+                DIR="$HOME/.config/waybar/skins"
+                CONFIG="$HOME/.config/waybar/config.jsonc"
+                STYLE="$HOME/.config/waybar/style.css"
+                ;;
+        esac
+
+        makenotif customize "$ICON" "$NAME" "$MSG" true
+
+        CHOICE=$(ls "$DIR" | wofi --dmenu --prompt "Select $NAME Skin")
+
+        if [ -n "$CHOICE" ]; then
+            PATH_SKIN="$DIR/$CHOICE"
+
+            echo "@import \"$PATH_SKIN/style.css\";" > "$STYLE"
+
+            sed -i "\|^source = $DIR/|d" "$HYPR"
+            echo "source = $PATH_SKIN/layerrule.conf" >> "$HYPR"
+
+            case $FEATURE in
+                launcher)
+                    cp "$PATH_SKIN/config" "$CONFIG"
+                    ;;
+                panel)
+                    cp "$PATH_SKIN/config.json" "$CONFIG"
+                    swaync-client -R
+                    swaync-client -rs
+                    ;;
+                navbar)
+                    echo "{ \"include\": [ \"$PATH_SKIN/layout.jsonc\" ] }" > "$CONFIG"
+                    killall waybar && sleep 0.05
+                    systemctl --user restart waybar &
+                    ;;
+            esac
+
+            makenotif customize "$ICON" "$NAME" "Skin changed to: $CHOICE" true
+        fi
+        ;;
+esac
