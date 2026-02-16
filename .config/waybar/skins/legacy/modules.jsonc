@@ -85,9 +85,12 @@
 
     "network": {
         "interval": 10,
-        "format-wifi": "  {essid} {signalStrength} ",
-        "format-ethernet": "󱓞 Wired connection",
+        "format-wifi": " ",
+        "format-ethernet": "󱓞",
         "format-disconnected": "",
+        "tooltip-format-wifi": "  {essid} {signalStrength}  ",
+        "tooltip-format-ethernet": "󱓞  Wired connection",
+        "tooltip-format-disconnected": " Disconnected",
         "on-click-right": "hyprctl dispatch exec kitty nmtui"
     },
 
@@ -96,7 +99,7 @@
         "format-on": "󰂰",
         "format-off": "󰂲",
         "format-disabled" : "󰂲",
-        "format-connected" : "{device_alias}    {device_battery_percentage}%",
+        "format-connected" : "",
         "tooltip-format": "{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}",
         "tooltip-format-enumerate-connected-battery": "{device_alias}\t {device_battery_percentage}%",
@@ -145,11 +148,11 @@
 
     "power-profiles-daemon": {
         "format": "{icon}",
-        "tooltip-format": "Power profile: {profile}",
+        "tooltip-format": "Power Profile: {profile}",
         "format-icons": {
-            "performance": "",
-            "balanced": " ",
-            "power-saver": "󰂄"
+            "Performance": "",
+            "Balanced": " ",
+            "Power-Saver": "󰂄"
         }
     },
 

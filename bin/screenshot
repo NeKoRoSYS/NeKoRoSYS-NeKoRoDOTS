@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 if pgrep -x hyprshot > /dev/null || pgrep -x slurp > /dev/null; then
     killall -9 hyprshot slurp hyprpicker grim
-    exit 0 # Stop script execution here
+    exit 0
 fi
 
 MODE=$1
@@ -14,7 +14,7 @@ else
     hyprshot -m $MODE --clipboard-only -s
 fi
 
-killall wofi
+pkill wofi
 
 wl-paste > /tmp/screenshot.png && sleep 1
 makenotif hyprshot "/tmp/screenshot.png" Hyprshot "Captured $MODE to clipboard!" true camera-shutter.oga

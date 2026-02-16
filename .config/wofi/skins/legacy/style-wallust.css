@@ -1,11 +1,11 @@
-@import url('/home/nekorosys/.cache/wal/colors-waybar.css');
+@import url('/home/nekorosys/.cache/wallust/colors-waybar.css');
 
 /* Global styles */
 window {
   min-width: 550px;
   min-height: 325px;
   margin: 0px;
-  border: 2px solid @color5;
+  border: 2px solid @color13;
   border-radius: 10px;
   background-color: alpha(@background, 0.65);
   font-family: JetBrains Mono, monospace;
@@ -14,7 +14,7 @@ window {
 /* Input box */
 #input {
   margin: 5px;
-  border: 1px solid @color5;
+  border: 1px solid @color13;
   color: @text;
   background-color: alpha(@text-invert, 0.25);
   padding: 6px;
@@ -84,8 +84,8 @@ image {
 
 /* Active entry */
 #entry:selected {
-  background-color: @color11;
-  border-bottom: 2px solid @color5;
+  background-color: @color5;
+  border-bottom: 2px solid @color13;
   border-radius: 5px;
 }
 
@@ -95,7 +95,7 @@ image {
 }
 
 #entry:hover {
-  background-color: @color11;
+  background-color: @color13;
 }
 
 #entry:hover #text {

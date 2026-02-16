@@ -37,7 +37,8 @@ tooltip {
 
 tooltip label {
     padding: 8px;
-	font-weight: bold;
+    font-weight: bold;
+    color: @text;
 }
 
 .popup * {
@@ -50,7 +51,7 @@ tooltip label {
     border-radius: 10px;
     font-size: 14px;
     font-weight: 700;
-    color: @fg;
+    color: @text;
 }
 
 #custom-tray-icon {
@@ -66,6 +67,7 @@ tooltip label {
 }
 
 #tray-drawer:hover #custom-tray-icon {
+    text-shadow: 0 0 5px black, 0 0 4px black, 0 0 2px black;
     color: @accent;
 }
 

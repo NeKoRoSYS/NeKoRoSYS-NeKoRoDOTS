@@ -2,8 +2,9 @@
 set -eu
 
 # Directory setup
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 WALL_DIR="$HOME/.config/wallpapers"
-THUMB_CACHE="$HOME/.cache/wofi-thumbs"
+THUMB_CACHE="$HOME/.cache/wallpaper-thumbs"
 VIDEO_CACHE="$HOME/.cache/last_video"
 SOCKET="/tmp/mpvsocket"
 
@@ -20,7 +21,7 @@ gen_thumb() {
 
     case "$EXT" in
         mp4|mkv|webm)
-            ffmpeg -y -i "$FILE_PATH" -ss 00:00:02 -frames:v 1 -vf "scale=200:-1" "$OUT" > /dev/null 2>&1
+            ffmpeg -y -discard nokey -i "$FILE_PATH" -ss 00:00:02 -frames:v 1 -vf "scale=200:-1" "$OUT" > /dev/null 2>&1
             ;;
         png|jpg|jpeg)
             magick "$FILE_PATH" -thumbnail 200x "$OUT" > /dev/null 2>&1
@@ -31,14 +32,14 @@ gen_thumb() {
 if [ -n "${1:-}" ]; then
     SELECTED_FILE=$(basename "$1")
 else
-    THUMB_CACHE="$HOME/.cache/wofi-thumbs"
     mkdir -p "$THUMB_CACHE"
 
     FILE_LIST=$(find "$WALL_DIR" -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.mp4" -o -iname "*.mkv" -o -iname "*.webm" \) | while read -r line; do
         FILENAME=$(basename "$line")
-        EXT="${FILENAME##*.}"
         THUMB_PATH="$THUMB_CACHE/${FILENAME}.jpg"
-        [ ! -f "$THUMB_PATH" ] && gen_thumb "$line" & 
+        if [ ! -f "$THUMB_PATH" ]; then
+            gen_thumb "$line" &
+        fi
         echo "img:$THUMB_PATH:text:$FILENAME"        
     done)
 
@@ -107,17 +108,11 @@ case "$(echo "$EXTENSION" | tr '[:upper:]' '[:lower:]')" in
 
 	echo "$WALL" > "$VIDEO_CACHE"
 
-        # 1. Generate a temporary thumbnail for pywal
         TEMP_THUMB="/tmp/wall_thumb.jpg"
-        # -ss 00:00:05: Seeks to 5 seconds (to avoid black intro frames)
-        # -frames:v 1: Capture exactly one frame
-        # -y: Overwrite the file if it exists
         ffmpeg -y -ss 00:00:05 -i "$WALL" -frames:v 1 "$TEMP_THUMB" > /dev/null 2>&1
 
-        # 2. Apply pywal using the extracted frame
-        bash ~/.config/hypr/scripts/wallpapers/apply-theme.sh $TEMP_THUMB
+	bash "$SCRIPT_DIR/apply-theme.sh" $TEMP_THUMB
         
-        # Comprehensive mvpaper parameters:
         # -o passes mpv flags: 
         #   loop-file=inf (loop forever)
         #   --mute (no sound)
@@ -125,7 +120,15 @@ case "$(echo "$EXTENSION" | tr '[:upper:]' '[:lower:]')" in
         #   --no-input-default-bindings (disable keyboard/mouse interaction)
         #   --hwdec=auto (hardware acceleration for lower CPU usage)
 	export LIBVA_DRIVER_NAME=iHD
-        __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia mpvpaper -o "--input-ipc-server=$SOCKET loop-file=inf --mute --no-osc --no-osd-bar --hwdec=nvdec --vo=gpu --gpu-context=wayland --no-input-default-bindings" '*' "$WALL" &
+
+	if lspci | grep -qi nvidia; then
+	    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+	    HWDEC="nvdec"
+	else
+	    HWDEC="auto"
+	fi
+
+        __NV_PRIME_RENDER_OFFLOAD=1 mpvpaper -o "--input-ipc-server=$SOCKET loop-file=inf --mute --no-osc --no-osd-bar --hwdec=$HWDEC --vo=gpu --gpu-context=wayland --no-input-default-bindings" '*' "$WALL" &
 	mpvpaper-stop --socket-path "$SOCKET" --period 500 --fork &
         ;;
     
@@ -139,7 +142,7 @@ case "$(echo "$EXTENSION" | tr '[:upper:]' '[:lower:]')" in
         swww img "$WALL"
                 
         # Pywal with your specific backends        
-        bash ~/.config/hypr/scripts/wallpapers/apply-theme.sh $WALL
+	bash "$SCRIPT_DIR/apply-theme.sh" $WALL
         ;;
     *)
         echo "Unsupported format: $EXTENSION"

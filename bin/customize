@@ -12,19 +12,19 @@ OPTIONS="$wallpaper\n$waybar\n$launcher\n$lock\n$panel"
 CHOICE=$(echo -e "$OPTIONS" | wofi --dmenu --hide-scroll --lines 5 --cache-file /dev/null --prompt "Select Action")
 case "$CHOICE" in
 	"$wallpaper")
-		bash ~/.config/hypr/scripts/customize-feature.sh wallpaper
+		customize-feature wallpaper
 		;;
 	"$waybar")
-		bash ~/.config/hypr/scripts/customize-feature.sh waybar
+		customize-feature waybar
 		;;
 	"$launcher")
-		bash ~/.config/hypr/scripts/customize-feature.sh wofi
+		customize-feature launcher
 		;;
 	"$lock")
-		bash ~/.config/hypr/scripts/customize-feature.sh lockscreen
+		customize-feature lock
 		;;
 	"$panel")
-		bash ~/.config/hypr/scripts/customize-feature.sh panel
+		customize-feature panel
 		;;
 	*)
 		exit 1

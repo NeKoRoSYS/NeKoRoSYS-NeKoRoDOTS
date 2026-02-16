@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 pkill -x wofi
 
@@ -12,13 +12,13 @@ case $FEATURE in
         SKIN_DIR="$HOME/.config/hypr/hyprlock/skins"
         MAIN="$HOME/.config/hypr/hyprlock.conf"
         
-        makenotif customize preferences-desktop-theme Hyprlock "Select a lockscreen layout." true
+        makenotif customize preferences-desktop-theme Lockscreen "Select a lockscreen layout." true
         
-        CHOICE=$(ls "$SKIN_DIR" | grep '\.conf$' | wofi --dmenu --prompt "Select Hyprlock Layout")
+        CHOICE=$(ls "$SKIN_DIR" | grep '\.conf$' | wofi --dmenu --prompt "Select Lockscreen Layout")
 
         if [ -n "$CHOICE" ]; then
             echo "source = $SKIN_DIR/$CHOICE" > "$MAIN"
-            makenotif customize preferences-desktop-theme Hyprlock "Layout changed to: ${CHOICE%.conf}" true
+            makenotif customize preferences-desktop-theme Lockscreen "Layout changed to: ${CHOICE%.conf}" true
         fi
         ;;
         
@@ -35,25 +35,25 @@ case $FEATURE in
     wofi|panel|waybar)
         case $FEATURE in
             wofi)
-                NAME="Wofi"
+                NAME="Launcher"
                 ICON="preferences-desktop-theme"
-                MSG="Select a Wofi skin."
+                MSG="Select a launcher skin."
                 DIR="$HOME/.config/wofi/skins"
                 CONFIG="$HOME/.config/wofi/config.json"
                 STYLE="$HOME/.config/wofi/style.css"
                 ;;
             panel)
-                NAME="SwayNC"
+                NAME="Control Centre"
                 ICON="preferences-desktop-theme"
-                MSG="Select a SwayNC style."
+                MSG="Select Control Centre style."
                 DIR="$HOME/.config/swaync/skins"
                 CONFIG="$HOME/.config/swaync/config.json"
                 STYLE="$HOME/.config/swaync/style.css"
                 ;;
             waybar)
-                NAME="Waybar"
+                NAME="Navbar"
                 ICON="preferences-desktop-theme"
-                MSG="Select a waybar skin."
+                MSG="Select a navbar skin."
                 DIR="$HOME/.config/waybar/skins"
                 CONFIG="$HOME/.config/waybar/config.jsonc"
                 STYLE="$HOME/.config/waybar/style.css"

@@ -1,11 +1,11 @@
 /* 1. THEME & VARIABLE INTEGRATION */
-@import "/home/nekorosys/.cache/wal/colors-waybar.css";
+@import "/home/nekorosys/.cache/wallust/colors-waybar.css";
 
 :root {
     /* Synced with your appearance.conf active_opacity = 0.75 */
     --noti-bg: color-mix(in srgb, @background, transparent 39%); 
-    --noti-bg-clearer: color-mix(in srgb, @background, transparent 65%); 
-    --noti-border: @color5;           /* Matches col.active_border */
+    --noti-bg-clearer: color-mix(in srgb, @background, transparent 45%); 
+    --noti-border: @color13;           /* Matches col.active_border */
     --noti-radius: 10px;               /* Matches rounding = 10 */
     --noti-margin: 20px;               /* Matches gaps_out = 20 */
     
@@ -60,7 +60,7 @@ notificationwindow, blankwindow {
     border: 2px solid var(--noti-border); 
     border-radius: var(--noti-radius);    
     margin: var(--noti-margin);           
-    box-shadow: -15px 0px 20px 1px rgba(0, 0, 0, 0.6), 0 0 4px @color0;
+    box-shadow: -15px 0 50px 5px rgba(0, 0, 0, 0.6), 0 0 4px @color0;
 }
 
 .control-center .placeholder {
@@ -157,7 +157,7 @@ notificationwindow, blankwindow {
 }
 
 .inline-reply-button:hover {
-    background: @color11;
+    background: @color13;
     color: @color0;
 }
 
@@ -196,7 +196,7 @@ notificationwindow, blankwindow {
 }
 
 .widget-title button {
-    background: var(--noti-bg-clearer);
+    background: (--noti-bg) !important;
     margin-right: 5px;
     border: 1px solid #45475a;
     border-bottom: 2px solid @fg;
@@ -206,7 +206,7 @@ notificationwindow, blankwindow {
 
 .widget-title button:hover {
     background: var(--text-color);
-    border-bottom: 2px solid @color11;
+    border-bottom: 2px solid @color13;
     color: @text-invert;
 }
 
@@ -240,7 +240,7 @@ notificationwindow, blankwindow {
 
 /* Switch state when turned ON */
 .widget-dnd switch:checked {
-    background: @color11;
+    background: @color13;
 }
 
 .widget-mpris-player {
@@ -256,13 +256,13 @@ notificationwindow, blankwindow {
 }
 
 .widget-buttons-grid {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, alpha(@color11, 0.25) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, alpha(@color5, 0.25) 100%);
   margin-top: 20px;
   margin-left: 20px;
   margin-right: 20px;
   padding-top: 10px;
   padding-bottom: 15px;
-  border-bottom: 2px solid @color11;
+  border-bottom: 2px solid @color13;
 }
 
 /* Individual button styling */
@@ -293,9 +293,9 @@ notificationwindow, blankwindow {
 }
 
 .widget-notifications {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, alpha(@color11, 0.25) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, alpha(@color5, 0.25) 100%);
   margin-left: 20px;
-  border-bottom: 2px solid @color11;
+  border-bottom: 2px solid @color13;
   margin-right: 20px;
   margin-bottom: 20px;
 }
@@ -303,21 +303,21 @@ notificationwindow, blankwindow {
 .widget-buttons-grid > flowbox > flowboxchild > button:hover {
   background: @text;
   color: @text-invert;
-  border-bottom: 2px solid @color11;
+  border-bottom: 2px solid @color13;
 }
 
 /* Special styling for active toggle buttons */
 .widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
   text-shadow: 0 0 5px white;
-  background-color: @color11;
-  border-bottom: 2px solid @color5;
+  background-color: @color5;
+  border-bottom: 2px solid @color13;
   color: white;
 }
 
 .widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked:hover {
   text-shadow: 0 0 5px white !important;
-  background-color: @color5;
-  border-bottom: 2px solid @color11;
+  background-color: @color13;
+  border-bottom: 2px solid @color5;
   color: white;
 }
 
