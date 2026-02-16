@@ -60,13 +60,12 @@ notificationwindow, blankwindow {
     border: 2px solid var(--noti-border); 
     border-radius: var(--noti-radius);    
     margin: var(--noti-margin);           
-    box-shadow: -15px 0px 20px 1px rgba(0, 0, 0, 0.6), 0 0 4px @color0;
+    box-shadow: -15px 0px 20px 1px rgba(0, 0, 0, 0.4), 0 0 4px @color0;
 }
 
 .control-center .placeholder {
   color: black;
 }
-
 
 /* 4. NOTIFICATION CARDS */
 
