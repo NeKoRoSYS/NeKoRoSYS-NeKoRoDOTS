@@ -1,0 +1,33 @@
+#!/bin/bash
+
+pkill -x wofi
+
+wallpaper="Select Wallpaper"
+waybar="Select Navbar Skin"
+launcher="Select Launcher Skin"
+lock="Select Lockscreen Layout"
+panel="Select Control Centre Layout"
+OPTIONS="$wallpaper\n$waybar\n$launcher\n$lock\n$panel"
+
+CHOICE=$(echo -e "$OPTIONS" | wofi --dmenu --hide-scroll --lines 5 --cache-file /dev/null --prompt "Select Action")
+case "$CHOICE" in
+	"$wallpaper")
+		customize-feature wallpaper
+		;;
+	"$waybar")
+		customize-feature waybar
+		;;
+	"$launcher")
+		customize-feature launcher
+		;;
+	"$lock")
+		customize-feature lock
+		;;
+	"$panel")
+		customize-feature panel
+		;;
+	*)
+		exit 1
+		;;
+esac
+
