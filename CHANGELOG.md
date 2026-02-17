@@ -1,4 +1,4 @@
-Releases: NeKoRoSYS/NeKoRoDOTS
+Releases: NeKoRoSYS/NeKoRoSHELL
 
 # 1.3.3 - Quick Fix
 
