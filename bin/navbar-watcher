@@ -3,12 +3,7 @@
 STATE=1
 
 toggle_navbar() {
-    VISIBLE_WINDOWS=$(hyprctl clients -j | jq -r '
-        [ .[] | select(.workspace.id as $ws | 
-        (map(.activeWorkspace.id) | contains([$ws]))) ] | length
-    ' --argjson monitors "$(hyprctl monitors -j)")
-
-    VISIBLE_COUNT=$(hyprctl clients -j | jq --argjson monitors "$(hyprctl monitors -j)" '
+    VISIBLE_COUNT=$(hyprctl -j clients | jq --argjson monitors "$(hyprctl -j monitors)" '
         [ .[] | .workspace.id ] as $window_workspaces |
         [ $monitors[].activeWorkspace.id ] as $active_workspaces |
         [ $window_workspaces[] | select(. as $w | $active_workspaces | contains([$w])) ] | length
