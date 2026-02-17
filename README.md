@@ -6,12 +6,12 @@
 <br>
 <br>
 
-# NeKoRoDOTS 
+# NeKoRoSHELL 
 <br>
 
 The best way to say "I use Arch btw 🤓" is if your desktop profile looks sleek and suave.
 
-**NeKoRoDOTS** aims to provide an out-of-the-box, clean and reliable, generic, and modular framework that lets you easily customize your desktop experience with simple UI design philosophy in mind.
+**NeKoRoSHELL** aims to provide an out-of-the-box, clean and reliable, generic, and modular framework that lets you easily customize your desktop experience with simple UI design philosophy in mind.
 <br>
 <br>
 
@@ -25,13 +25,13 @@ The best way to say "I use Arch btw 🤓" is if your desktop profile looks sleek
 
 ## [Features](CHANGELOG.md)
 
-NeKoRoDOTS focuses on simplicity and modularity.
+NeKoRoSHELL focuses on simplicity and modularity.
 <br>
 
-The following are what NeKoRoDOTS currently offers:
+The following are what NeKoRoSHELL currently offers:
 - **One-tap Installer Script**
-  - Use `git clone https://github.com/NeKoRoSYS/NeKoRoDOTS`
-  - Then `cd NeKoRoDOTS`
+  - Use `git clone https://github.com/NeKoRoSYS/NeKoRoSHELL`
+  - Then `cd NeKoRoSHELL`
   - and finally, `bash install.sh` to install the dotfiles.
     - You can freely customize `flatpak.txt` and `pkglist.txt` before running `install.sh`.
     - The installer assumes you already installed `base-devel`, `git`, `yay`, `flatpak`.
@@ -57,11 +57,11 @@ The following are what NeKoRoDOTS currently offers:
 - **Smart Navbar**
   - Uses bash script wrappers for `waybar` for the modes: Static, Dynamic, and Hover.
 <p align="center">
-  <img src="https://github.com/NeKoRoSYS/NeKoRoDOTS/blob/main/showcase/navbar-modes.gif" alt="Navbar Demo" />
+  <img src="https://github.com/NeKoRoSYS/NeKoRoSHELL/blob/main/showcase/navbar-modes.gif" alt="Navbar Demo" />
 </p>
 
-- **Advanced Customization - Make NeKoRoDOTS YOURS!**
-  - NeKoRoDOTS is not just an identity, it is a framework. This repo gives you at most 2 pre-installed out-of-the-box layouts/styling for waybar, hyprlock, and SwayNC. The best part? You can make your own!
+- **Advanced Customization - Make NeKoRoSHELL YOURS!**
+  - NeKoRoSHELL is not just an identity, it is a framework. This repo gives you at most 2 pre-installed out-of-the-box layouts/styling for waybar, hyprlock, and SwayNC. The best part? You can make your own!
   - Credits to [iyiolacak](https://github.com/iyiolacak/iyiolacak-swaync-config?tab=readme-ov-file), [justinmdickey](https://github.com/justinmdickey/publicdots/blob/main/.config/hypr/hyprlock.conf), and [mkhmtolzhas](https://github.com/mkhmtolzhas/mkhmtdots) for their amazing theming.
   - Switch to Dark and Light Mode
   - Select Waybar Skins
@@ -93,7 +93,7 @@ The following are what NeKoRoDOTS currently offers:
 
 ### Roadmap
 
-NeKoRoDOTS is currently being developed by one person (*cough* [CONTRIBUTING](https://github.com/NeKoRoSYS/NeKoRoDOTS/tree/main?tab=contributing-ov-file#) *cough*) and is constantly under rigorous quality assurance for improvement. We always aim to keep a "no-break" promise for every update so that you can safely update to later versions without expecting any breakages.
+NeKoRoSHELL is currently being developed by one person (*cough* [CONTRIBUTING](https://github.com/NeKoRoSYS/NeKoRoSHELL/tree/main?tab=contributing-ov-file#) *cough*) and is constantly under rigorous quality assurance for improvement. We always aim to keep a "no-break" promise for every update so that you can safely update to later versions without expecting any breakages.
 
 | 📋 **TODO** | **STATUS** |
 | :---: | :---: |
@@ -101,7 +101,7 @@ NeKoRoDOTS is currently being developed by one person (*cough* [CONTRIBUTING](ht
 | Implement base functionality | ✅ |
 | Implement base QOL features | ✅ |
 | Optimizations | ✅ |
-| Color Handling - Replace pywal6 with wallust (BETA, [Issues](https://github.com/NeKoRoSYS/NeKoRoDOTS/issues/1)) | 🛑 |
+| Color Handling - Replace pywal6 with wallust (BETA, [Issues](https://github.com/NeKoRoSYS/NeKoRoSHELL/issues/1)) | 🛑 |
 | Dmenu Overhaul - Replace wofi with rofi | 🛠 |
 | Support for other distros | ⏳ |
 | Qt and Kvantum integration | 🤔 |
