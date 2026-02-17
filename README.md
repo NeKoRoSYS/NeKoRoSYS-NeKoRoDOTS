@@ -24,7 +24,7 @@ The best way to say "I use Arch btw 🤓" is if your desktop profile looks sleek
 | 🤔 [Optional](#optional) |
 | 💸 [Sponsorship](#sponsorship) |
 | 🫂 [Contribution](#contribution) |
-</p>
+</div>
 <br>
 
 ## Dependencies
@@ -74,7 +74,7 @@ NeKoRoDOTS is currently being developed by one person (*cough* [CONTRIBUTING](ht
 | Dmenu Overhaul - Replace wofi with rofi | 🛠 |
 | Support for other distros | ⏳ |
 | Qt and Kvantum integration | 🤔 |
-</p>
+</div>
 
 The following are what NeKoRoDOTS currently offers:
 - **One-tap Installer Script**
