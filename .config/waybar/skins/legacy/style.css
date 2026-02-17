@@ -63,7 +63,8 @@ tooltip label {
     background: @background;
     border: 1px solid @border;
     border-radius: 8px;
-    padding: 2px 5px;
+    padding: 2px 6px;
+    margin-left: 6px;
 }
 
 #tray-drawer:hover #custom-tray-icon {
@@ -142,14 +143,6 @@ tooltip label {
 
 #workspaces button:hover {
     background: transparent;
-}
-
-#mpris, #window {
-    margin: 0 5px;
-}
-
-#mpris.paused {
-    color: @inactive;
 }
 
 #custom-logout {

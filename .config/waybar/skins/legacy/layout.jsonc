@@ -13,7 +13,7 @@
     "group/gleft2" : {
         "orientation": "horizontal",
         "modules" : [
-            "hyprland/workspaces", "hyprland/window"
+            "hyprland/workspaces"
         ]
     },
 

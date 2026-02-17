@@ -1,15 +1,32 @@
 {
     "hyprland/workspaces": {
         "format": "{icon}",
+	"format-window-separator": "",
+	"on-click": "activate",
         "persistent-workspaces": { "*": 5 },
 	"on-scroll-up": "hyprctl dispatch workspace e-1",
 	"on-scroll-down": "hyprctl dispatch workspace e+1",
         "cursor" : true,
+	"window-rewrite-default": "",
+	"window-rewrite": {
+            "class<firefox>": "",
+            "class<kitty>": "",
+            "title<.*youtube.*>": ""
+        },
         "format-icons": {
             "active": "󰣇",
             "persistent": "",
-            "empty": ""
-         }
+	    "urgent": "",
+            "empty": "",
+            "default": ""
+        },
+	"workspace-taskbar": {
+            "enable": true,
+            "update-active-window": true,
+	    "active-window-position": "first",
+            "format": "{icon}",
+            "icon-size": 16,
+        }
     },
 
     "hyprland/window" : {
@@ -134,16 +151,6 @@
                 "today": "<span color='#41a6b5'><b><u>{}</u></b></span>"
 	    }
         }
-    },
-
-    "mpris": {
-        "format": "{artist} - {title}",
-        "tooltip-format" : "{album}",
-        "format-paused": " {artist} - {title}",
-        "on-click": "playerctl play-pause",
-        "on-scroll-up": "playerctl previous",
-        "on-scroll-down": "playerctl next",
-        "max-length": 45
     },
 
     "power-profiles-daemon": {
