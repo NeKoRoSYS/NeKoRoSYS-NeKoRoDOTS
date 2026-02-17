@@ -2,6 +2,8 @@
 > Please star the repo if you like the dotfiles. Thank you 🙏
 <br>
 
+<div align="center">
+
 ![Screenshot](showcase/image.png) 
 <br>
 <br>
@@ -13,6 +15,8 @@
  ![GitHub last commit](https://img.shields.io/github/last-commit/NeKoRoSYS/NeKoRoSHELL?style=for-the-badge) ![GitHub contributors](https://img.shields.io/github/contributors/NeKoRoSYS/NeKoRoSHELL?style=for-the-badge) ![Discord](https://img.shields.io/discord/774473787394752532?style=for-the-badge&label=Discord&color=%235865F2)
  <br>
  <br>
+
+</div>
 
 The best way to say "I use Arch btw 🤓" is if your desktop profile looks sleek and suave.
 
