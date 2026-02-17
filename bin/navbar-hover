@@ -5,17 +5,14 @@ STATE="hidden"
 
 # Function to read config
 read_config() {
-    # Defaults
     TRIGGER_SIZE=10
     BAR_POSITION="top"
-    if [ -f "$HOVER_CONF" ]; then source "$HOVER_CONF"; fi
+    [ -f "$HOVER_CONF" ] && source "$HOVER_CONF"
 }
 
-# Function to parse monitor geometry into arrays
-# We do this once to avoid calling jq 10 times a second
+# Optimized monitor updates - call once and cache
 update_monitors() {
-    # Get raw monitor data: x, y, width, height
-    # Format: "0 0 1920 1080" (one line per monitor)
+    # Only call jq here to minimize process forking
     mapfile -t MONITORS < <(hyprctl monitors -j | jq -r '.[] | "\(.x) \(.y) \(.width) \(.height)"')
 }
 
@@ -24,15 +21,13 @@ if ! pgrep -x "waybar" >/dev/null; then
     waybar &
     sleep 0.5
 fi
+
 pkill -SIGUSR1 waybar
 read_config
 update_monitors
 
-# Update monitors every 50 cycles (5 seconds) to handle plug/unplug events
 CYCLE_COUNT=0
-
 while true; do
-    # Periodic config/monitor refresh
     ((CYCLE_COUNT++))
     if [ "$CYCLE_COUNT" -ge 50 ]; then
         read_config
@@ -40,55 +35,30 @@ while true; do
         CYCLE_COUNT=0
     fi
 
-    # 1. Get Cursor (Fast)
-    POS=$(hyprctl cursorpos)
-    CX=${POS%,*}
-    CY=${POS#*, }
+
+    IFS=', ' read -r CX CY < <(hyprctl cursorpos)
 
     IS_HOVERING=0
-
-    # 2. Pure Bash Check against cached monitor data
     for mon in "${MONITORS[@]}"; do
         read -r mx my mw mh <<< "$mon"
         
-        # Calculate boundaries based on position
+        # Optimized boundary checks using Bash math
         case "$BAR_POSITION" in
-            "top")
-                # X must be within width, Y must be between Top and Top+Size
-                if (( CX >= mx && CX < mx + mw && CY >= my && CY <= my + TRIGGER_SIZE )); then
-                    IS_HOVERING=1; break
-                fi
-                ;;
-            "bottom")
-                # Y must be between Bottom-Size and Bottom
-                if (( CX >= mx && CX < mx + mw && CY >= my + mh - TRIGGER_SIZE && CY <= my + mh )); then
-                    IS_HOVERING=1; break
-                fi
-                ;;
-            "left")
-                if (( CX >= mx && CX <= mx + TRIGGER_SIZE && CY >= my && CY < my + mh )); then
-                    IS_HOVERING=1; break
-                fi
-                ;;
-            "right")
-                if (( CX >= mx + mw - TRIGGER_SIZE && CX <= mx + mw && CY >= my && CY < my + mh )); then
-                    IS_HOVERING=1; break
-                fi
-                ;;
+            "top")    (( CX >= mx && CX < mx + mw && CY >= my && CY <= my + TRIGGER_SIZE )) && IS_HOVERING=1 ;;
+            "bottom") (( CX >= mx && CX < mx + mw && CY >= my + mh - TRIGGER_SIZE && CY <= my + mh )) && IS_HOVERING=1 ;;
+            "left")   (( CX >= mx && CX <= mx + TRIGGER_SIZE && CY >= my && CY < my + mh )) && IS_HOVERING=1 ;;
+            "right")  (( CX >= mx + mw - TRIGGER_SIZE && CX <= mx + mw && CY >= my && CY < my + mh )) && IS_HOVERING=1 ;;
         esac
+        [ "$IS_HOVERING" -eq 1 ] && break
     done
 
-    # 3. Toggle Logic
-    if [ "$IS_HOVERING" -eq 1 ]; then
-        if [ "$STATE" = "hidden" ]; then
-            pkill -SIGUSR1 waybar
-            STATE="visible"
-        fi
-    else
-        if [ "$STATE" = "visible" ]; then
-            pkill -SIGUSR1 waybar
-            STATE="hidden"
-        fi
+    # State machine toggle to prevent spamming signals
+    if [ "$IS_HOVERING" -eq 1 ] && [ "$STATE" = "hidden" ]; then
+        pkill -SIGUSR1 waybar
+        STATE="visible"
+    elif [ "$IS_HOVERING" -eq 0 ] && [ "$STATE" = "visible" ]; then
+        pkill -SIGUSR1 waybar
+        STATE="hidden"
     fi
 
     sleep 0.1
