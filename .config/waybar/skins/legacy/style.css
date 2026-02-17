@@ -125,12 +125,12 @@ tooltip label {
 #memory.critical, #cpu.critical,
 #temperature.critical, #battery.critical,
 #network.disconnected{
-	color: red;
+	color: @red;
 }
 
 #memory.warning, #cpu.warning,
 #temperature.warning, #battery.warning {
-	color: yellow;
+	color: @yellow;
 }
 
 #workspaces button {
@@ -153,7 +153,7 @@ tooltip label {
 }
 
 #custom-logout {
-    color: red;
+    color: @red;
     margin-right: 5px;
     padding: 0 12px;
 }
@@ -179,5 +179,5 @@ tooltip label {
 }
 
 #power-profiles-daemon.balanced {
-    color: blue;
+    color: cornflowerblue;
 }
