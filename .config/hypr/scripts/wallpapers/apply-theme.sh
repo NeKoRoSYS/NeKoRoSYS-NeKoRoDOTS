@@ -3,11 +3,11 @@
 THUMB_CACHE="$HOME/.cache/wallpaper-thumbs"
 STATE_FILE="$HOME/.cache/theme_mode"
 WAYBAR_MODE_FILE="$HOME/.cache/.waybar_mode"
-colors="$HOME/.cache/wal/colors-waybar.css"
+colors="$HOME/.cache/wallust/colors-waybar.css"
 
 MANAGEMENT_MODE=$(cat "$WAYBAR_MODE_FILE" 2>/dev/null || echo "static")
 
-img_path="${1:-$(cat "$HOME/.cache/wal/wal")}"
+img_path="${1:-$(cat "$HOME/.cache/wallust/wal")}"
 current_theme="${2:-$(cat "$STATE_FILE")}"
 
 FILENAME=$(basename "$img_path")
@@ -19,25 +19,24 @@ else
     TARGET_IMG="$img_path"
 fi
 
-WAL_PARAMS="-i "$img_path" -n -q"
+PARAMS="$TARGET_IMG -q -C"
 
-if command -v wal >/dev/null 2>&1; then
+if command -v wallust >/dev/null 2>&1; then
     echo "Updating system theme using: $(basename "$TARGET_IMG")"
-	sed -i '/^@define-color text/d' "$colors"
-	sed -i '/^@define-color text-invert/d' "$colors"
+	systemctl --user stop navbar.service navbar-watcher.service navbar-hover.service
 	if [ "$current_theme" = "Dark" ]; then
-		wal $WAL_PARAMS --backend haishoku || \
-		wal $WAL_PARAMS --backend colorthief || \
-		wal $WAL_PARAMS
+		wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-dark.toml || wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-dark.toml -b full
 		echo "@define-color text #F5F5F5;" >> $colors
 		echo "@define-color text-invert #121212;" >> $colors	
 	else
-		wal $WAL_PARAMS -l --backend haishoku || \
-		wal $WAL_PARAMS -l --backend colorthief || \
-		wal $WAL_PARAMS -l
+		wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-light.toml || wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-light.toml -b full
 		echo "@define-color text-invert #F5F5F5;" >> $colors	
 		echo "@define-color text #121212;" >> $colors
 	fi
+
+	mv ~/.cache/wallust/colors-hyprland-raw.conf ~/.cache/wallust/colors-hyprland.conf
+
+	swaync-client -rs
 
 	case "$MANAGEMENT_MODE" in
 	"static")
@@ -50,6 +49,4 @@ if command -v wal >/dev/null 2>&1; then
 		systemctl --user restart navbar-watcher.service &
 		;;
 	esac
-
-    swaync-client -rs
 fi

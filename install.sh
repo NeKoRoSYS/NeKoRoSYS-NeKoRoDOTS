@@ -47,9 +47,6 @@ else
     exit 1
 fi
 
-echo -e "${BLUE}Installing Pywal backend dependencies...${NC}"
-pip install haishoku colorthief --break-system-packages 2>/dev/null || pip install haishoku colorthief
-
 backup_config() {
     if [ -d "$1" ]; then
         BACKUP_NAME="${1}_backup_$(date +%Y%m%d_%H%M%S)"

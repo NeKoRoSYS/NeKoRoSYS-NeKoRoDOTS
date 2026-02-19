@@ -112,16 +112,14 @@ case $FEATURE in
                     ;;
                 navbar)
                     echo "{ \"include\": [ \"$PATH_SKIN/layout.jsonc\" ] }" > "$CONFIG"
+		    cp "$PATH_SKIN/navbar-hover.conf" "$HOME/.cache/navbar-hover.conf"
 		    killall waybar && sleep 0.05
 
-		    systemctl --user stop navbar.service
-		    systemctl --user stop navbar-hover.service
-		    systemctl --user stop navbar-watcher.service
+		    systemctl --user stop navbar.service navbar-hover.service navbar-watcher.service
 
 		    if [ "$MANAGEMENT_MODE" = "static" ]; then
 			systemctl --user restart navbar.service &
 		    elif [ "$MANAGEMENT_MODE" = "hover" ]; then
-			cp "$PATH_SKIN/navbar-hover.conf" "$HOME/.cache/navbar-hover.conf"
 			systemctl --user restart navbar-hover.service
 		    else
 			systemctl --user restart navbar-watcher.service

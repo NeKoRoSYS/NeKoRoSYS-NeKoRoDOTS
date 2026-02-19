@@ -2,11 +2,11 @@
 
 backend = "wal"
 color_space = "lch"
-palette = "dark16"
+palette = "light16"
 threshold = 11
 saturation = 10
 
 [templates]
-hyprland = { src = "colors-hyprland.conf", dst = "~/.cache/wallust/colors-hyprland.conf" } 
+hyprland = { src = "colors-hyprland.conf", dst = "~/.cache/wallust/colors-hyprland-raw.conf" } 
 kitty = { src = "colors-kitty.conf", dst = "~/.cache/wallust/colors-kitty.conf" } 
 waybar = { src = "colors-waybar.css", dst = "~/.cache/wallust/colors-waybar.css" }

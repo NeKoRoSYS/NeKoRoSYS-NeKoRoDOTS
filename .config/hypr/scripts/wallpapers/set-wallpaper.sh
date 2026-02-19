@@ -120,7 +120,7 @@ case "$(echo "$EXTENSION" | tr '[:upper:]' '[:lower:]')" in
         TEMP_THUMB="/tmp/wall_thumb.jpg"
         ffmpeg -y -ss 00:00:05 -i "$WALL" -frames:v 1 -vf "scale=200:-1" "$TEMP_THUMB" > /dev/null 2>&1
 
-        bash "$SCRIPT_DIR/apply-theme.sh" "$TEMP_THUMB"
+        bash "$SCRIPT_DIR/apply-theme.sh" "$WALL"
 
         export LIBVA_DRIVER_NAME=iHD
         if lspci | grep -qi nvidia; then
@@ -151,4 +151,5 @@ case "$(echo "$EXTENSION" | tr '[:upper:]' '[:lower:]')" in
 esac
 
 echo "Wallpaper update complete."
+echo "$WALL" > ~/.cache/wallust/wal
 makenotif customize "folder-pictures" "Wallpaper" "Changed wallpaper to $SELECTED_FILE" "true" ""

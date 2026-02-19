@@ -3,9 +3,7 @@
 MODE_FILE="$HOME/.cache/.waybar_mode"
 CURRENT_MODE=$(cat "$MODE_FILE" 2>/dev/null || echo "static")
 
-systemctl --user stop navbar.service
-systemctl --user stop navbar-watcher.service
-systemctl --user stop navbar-hover.service
+systemctl --user stop navbar.service navbar-hover.service navbar-watcher.service
 
 if [ "$CURRENT_MODE" = "dynamic" ]; then
     systemctl --user start navbar-watcher.service

@@ -14,9 +14,7 @@ if [ -z "$CHOICE" ]; then
 fi
 
 stop_services() {
-    systemctl --user stop navbar.service
-    systemctl --user stop navbar-watcher.service
-    systemctl --user stop navbar-hover.service
+    systemctl --user stop navbar.service navbar-hover.service navbar-watcher.service
     killall waybar 2>/dev/null
 }
 

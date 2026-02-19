@@ -44,9 +44,6 @@ pipewire
 pipewire-alsa
 pipewire-jack
 pipewire-pulse
-python-pip
-python-pywal16
-python-setuptools
 power-profiles-daemon
 reflector
 smartmontools
@@ -60,6 +57,7 @@ ttf-jetbrains-mono-nerd
 tty-clock-git
 unzip
 vim
+wallust
 waybar
 wayland-utils
 wireplumber

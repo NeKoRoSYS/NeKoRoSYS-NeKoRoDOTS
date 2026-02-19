@@ -35,9 +35,8 @@ x11-misc/prime-run
 media-sound/pavucontrol
 app-misc/piper
 media-video/pipewire
-dev-python/pip
-dev-python/setuptools
 sys-power/power-profiles-daemon
+dev-lang/rust
 sys-apps/smartmontools
 net-misc/socat
 gui-apps/swaync
