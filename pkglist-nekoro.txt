@@ -79,9 +79,6 @@ pipewire-jack
 pipewire-pulse
 plymouth
 power-profiles-daemon
-python-pip
-python-pywal16
-python-setuptools
 qt6-virtualkeyboard
 qt6ct
 r-quick-share
@@ -102,6 +99,7 @@ tty-clock-git
 unzip
 vim
 vulkan-tools
+wallust
 waybar
 wayland-utils
 wget
