@@ -3,11 +3,11 @@
 MODE_FILE="$HOME/.cache/.waybar_mode"
 CURRENT_MODE=$(cat "$MODE_FILE" 2>/dev/null || echo "static")
 
-STATIC="Static (Always Visible)"
-DYNAMIC="Dynamic (Smart Auto-hide)"
-HOVER="Hover (Mouse Reveal)"
+STATIC="Static"
+DYNAMIC="Dynamic"
+HOVER="Hover"
 
-CHOICE=$(echo -e "$STATIC\n$DYNAMIC\n$HOVER" | rofi -dmenu -p "Select Navbar Mode" -l 3)
+CHOICE=$(echo -e "$STATIC\n$DYNAMIC\n$HOVER" | rofi -dmenu -p "Select Navbar Mode" -no-cache -theme-str 'listview { lines: 3; scrollbar: false; }')
 
 if [ -z "$CHOICE" ]; then
     exit 0
