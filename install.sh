@@ -21,8 +21,12 @@ NC='\033[0m'
 
 echo -e "${BLUE}Starting installation...${NC}"
 
-if ! command -v yay &> /dev/null; then
-    echo -e "${RED}Error: yay is not installed.${NC}"
+if command -v paru &> /dev/null; then
+    AUR_HELPER="paru"
+elif command -v yay &> /dev/null; then
+    AUR_HELPER="yay"
+else
+    echo -e "${RED}Error: Neither yay nor paru is installed.${NC}"
     exit 1
 fi
 
@@ -32,8 +36,8 @@ if ! command -v flatpak &> /dev/null; then
 fi
 
 if [ -f "pkglist.txt" ]; then
-    echo -e "${BLUE}Installing packages from pkglist.txt...${NC}"
-    yay -S --needed --noconfirm - < pkglist.txt
+    echo -e "${BLUE}Installing packages from pkglist.txt using $AUR_HELPER...${NC}"
+    $AUR_HELPER -S --needed --noconfirm - < pkglist.txt
 else
     echo -e "${RED}Warning: pkglist.txt not found! Skipping system pkgs.${NC}"
 fi
@@ -102,7 +106,12 @@ fi
 cp -r .p10k.zsh ~/
 cp .face.icon ~/
 cp change-avatar.sh ~/
-cp bin ~/
+cp -r bin ~/
+
+
+echo -e "${BLUE}Compiling C++ Daemons...${NC}"
+g++ -O3 -o ~/bin/navbar-hover bin/source/navbar-hover.cpp
+g++ -O3 -o ~/bin/navbar-watcher bin/source/navbar-watcher.cpp
 
 echo -e "${BLUE}Setting script permissions...${NC}"
 find ~/.config/ -name "*.sh" -exec chmod +x {} + 2>/dev/null
