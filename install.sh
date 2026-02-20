@@ -205,7 +205,7 @@ if command -v "systemctl" >/dev/null 2>&1; then
     echo -e "${BLUE}Enabling SwayNC...${NC}"
     systemctl --user enable swaync.service
 else
-    echo -e "${RED}Cannot run command "systemctl". please enable the waybar and SwanNC services manually.${NC}"
+    echo -e "${RED}Cannot run command 'systemctl'. Please enable the waybar and SwayNC services manually.${NC}"
 fi
 
 echo -e "${GREEN}Installation complete! Please restart your session.${NC}"
