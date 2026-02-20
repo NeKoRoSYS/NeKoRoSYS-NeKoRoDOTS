@@ -1,0 +1,15 @@
+waybar
+rofi
+kitty
+dolphin
+grim
+slurp
+wl-clipboard
+cava
+btop
+fastfetch
+jq
+network-manager
+cargo
+build-essential
+pkg-config
