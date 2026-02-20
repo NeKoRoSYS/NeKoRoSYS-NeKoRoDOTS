@@ -1,245 +1,406 @@
 #!/bin/bash
 
-echo -e "# ======================================================= #"
-echo -e "#               NeKoRoSHELL Installation Wizard             #"
-echo -e "# ======================================================= #\n "
-
-while true; do
-    echo -ne "\033[0;34mDo you want to start the NeKoRoSHELL installation? (y/n): \033[0m"
-    read -r yn
-    case $yn in
-        [yY]* ) break;;
-        [nN]* ) echo -e "\033[0;31mInstallation aborted.\033[0m"; exit;;
-        * ) echo "Please answer yes (y) or no (n).";;
-    esac
-done
-
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${BLUE}Detecting operating system...${NC}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+cd "$SCRIPT_DIR" || { echo -e "${RED}Failed to navigate to script directory.${NC}"; exit 1; }
 
-if [ -f /etc/os-release ]; then
-    . /etc/os-release
-    OS=$ID
-    if [ "$OS" = "linuxmint" ] || [ "$OS" = "pop" ]; then
-        OS="ubuntu"
+echo -e "# ======================================================= #"
+echo -e "#            NeKoRoSHELL Installation Wizard              #"
+echo -e "# ======================================================= #\n "
+
+echo -e "${BLUE}Please choose your installation type:${NC}"
+echo -e "  ${GREEN}Minimal${NC}     - Backup existing .config files, copy the new .config files, and replace the hardcoded directories, but don't install dependencies."
+echo -e "  ${GREEN}Compilation${NC} - Backup existing .config files, copy the new .config files over, replace the hardcoded directories, and install every dependency.\n"
+
+cleanup() {
+    if [[ -n "$SUDO_PID" ]]; then
+        kill "$SUDO_PID" 2>/dev/null
     fi
-else
-    echo -e "${RED}Cannot detect operating system. /etc/os-release not found.${NC}"
-    exit 1
-fi
+}
+trap cleanup EXIT
 
-echo -e "${GREEN}Detected OS: $OS${NC}"
+INSTALL_TYPE=""
+while true; do
+    echo -ne "${BLUE}Type 'Minimal' or 'Compilation' to proceed (or 'exit' to abort): ${NC}"
+    read -r choice
+    choice="${choice,,}"
 
-echo -e "${BLUE}Starting installation...${NC}"
-
-echo -e "${BLUE}Installing system dependencies...${NC}"
-
-case "$OS" in
-    arch|endeavouros|manjaro)
-        if command -v paru &> /dev/null; then
-            AUR_HELPER="paru"
-        elif command -v yay &> /dev/null; then
-            AUR_HELPER="yay"
-        else
-            echo -e "${RED}Error: yay or paru is required for Arch.${NC}"
-            exit 1
-        fi
+    if [[ "$choice" == "minimal" ]]; then
+        INSTALL_TYPE="minimal"
+        echo -e "${GREEN}Minimal installation selected.${NC}"
+        break
+    elif [[ "$choice" == "compilation" ]]; then
+        INSTALL_TYPE="compilation"
+        echo -e "${GREEN}Compilation installation selected.${NC}"
         
-        if [ -f "pkglist-arch.txt" ]; then
-            $AUR_HELPER -S --needed --noconfirm - < pkglist-arch.txt
-        fi
-        ;;
-
-    fedora)
-        if [ -f "pkglist-fedora.txt" ]; then
-            sudo dnf install -y $(cat pkglist-fedora.txt)
-        else
-            echo -e "${RED}pkglist-fedora.txt not found!${NC}"
-        fi
-        ;;
-
-    ubuntu|debian)
-        echo -e "${RED}WARNING: Debian/Ubuntu do not provide Hyprland or its ecosystem (Hyprlock, Hypridle, SwayNC, etc.) in their standard repositories.${NC}"
-        echo -e "${RED}You must install Hyprland manually or via a 3rd party PPA/script before using this dotfile setup.${NC}"
-        sleep 3
-        if [ -f "pkglist-debian.txt" ]; then
-            sudo apt-get update
-            sudo apt-get install -y $(cat pkglist-debian.txt)
-        else
-            echo -e "${RED}pkglist-debian.txt not found!${NC}"
-        fi
-        ;;
-        
-    gentoo)
-        if [ -f "pkglist-gentoo.txt" ]; then
-            sudo emerge -av --noreplace $(cat pkglist-gentoo.txt)
-        else
-            echo -e "${RED}pkglist-gentoo.txt not found!${NC}"
-        fi
-        ;;
-
-    *)
-        echo -e "${RED}Unsupported OS: $OS. Please install dependencies manually.${NC}"
-        echo -ne "Do you wish to continue with config deployment anyway? (y/n): "
-        read -r continue_ans
-        if [[ ! "$continue_ans" =~ ^[Yy]$ ]]; then
-            exit 1
-        fi
-        ;;
-esac
-
-echo -e "${BLUE}Checking for packages that require Cargo (Rust)...${NC}"
-if command -v cargo &> /dev/null; then
-    export PATH="$HOME/.cargo/bin:$PATH"
-
-    if ! command -v wallust &> /dev/null; then
-        echo -e "${BLUE}Installing wallust via cargo... This may take a few minutes.${NC}"
-        cargo install wallust
+        echo -e "${BLUE}Caching sudo credentials for dependency installation...${NC}"
+        sudo -v
+        ( while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done ) 2>/dev/null &
+        SUDO_PID=$!
+        break
+    elif [[ "$choice" == "exit" ]]; then
+        echo -e "${RED}Installation aborted.${NC}"
+        exit 0
     else
-        echo -e "${GREEN}wallust is already installed.${NC}"
+        echo -e "${RED}Invalid input. Please type 'Minimal' or 'Compilation'.${NC}"
     fi
+done
 
-    if ! command -v swww &> /dev/null; then
-        echo -e "${BLUE}Installing swww via cargo... This may take a few minutes.${NC}"
-        cargo install --git https://github.com/LGFae/swww.git
+echo -e "${BLUE}Starting $INSTALL_TYPE installation...${NC}"
+
+# ==============================================================================
+# DEPENDENCY INSTALLATION (Compilation Mode Only)
+# ==============================================================================
+
+if [[ "$INSTALL_TYPE" == "compilation" ]]; then
+
+    echo -e "${BLUE}Detecting operating system...${NC}"
+
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+        OS=$ID
+        if [[ "$OS" == "linuxmint" ]] || [[ "$OS" == "pop" ]]; then
+            OS="ubuntu"
+        fi
     else
-        echo -e "${GREEN}swww is already installed.${NC}"
+        echo -e "${RED}Cannot detect operating system. /etc/os-release not found.${NC}"
+        exit 1
     fi
 
-    if ! grep -q 'export PATH="$HOME/.cargo/bin:$PATH"' ~/.bashrc; then
-        echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
-    fi
-    if [ -f ~/.zshrc ] && ! grep -q 'export PATH="$HOME/.cargo/bin:$PATH"' ~/.zshrc; then
-        echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.zshrc
-    fi
-else
-    echo -e "${RED}Cargo is not installed. Some tools (wallust, swww) could not be verified or installed.${NC}"
-fi
+    echo -e "${GREEN}Detected OS: $OS${NC}"
+    echo -e "${BLUE}Installing system dependencies...${NC}"
 
-echo -e "${BLUE}Checking for packages that require Go...${NC}"
-if command -v go &> /dev/null; then
-    export PATH="$HOME/go/bin:$PATH"
+    case "$OS" in
+        arch|endeavouros|manjaro)
+            if command -v paru &> /dev/null; then
+                AUR_HELPER="paru"
+            elif command -v yay &> /dev/null; then
+                AUR_HELPER="yay"
+            else
+                echo -e "${RED}Error: yay or paru is required for Arch-based systems.${NC}"
+                exit 1
+            fi
+            
+            if [[ -f "pkglist-arch.txt" ]]; then
+                $AUR_HELPER -S --needed --noconfirm - < pkglist-arch.txt
+            else
+                echo -e "${RED}Warning: pkglist-arch.txt not found!${NC}"
+            fi
+            ;;
 
-    if ! command -v cliphist &> /dev/null; then
-        echo -e "${BLUE}Installing cliphist via Go...${NC}"
-        go install go.senan.xyz/cliphist@latest
+        fedora)
+            if [[ -f "pkglist-fedora.txt" ]]; then
+                grep -vE '^\s*#|^\s*$' pkglist-fedora.txt | xargs sudo dnf install -y
+            else
+                echo -e "${RED}Warning: pkglist-fedora.txt not found!${NC}"
+            fi
+            ;;
+
+        ubuntu|debian)
+            echo -e "${RED}WARNING: Debian/Ubuntu do not provide Hyprland or its ecosystem natively.${NC}"
+            echo -e "${RED}Ensure you have installed them via a 3rd party PPA/script first.${NC}"
+            sleep 3
+            if [[ -f "pkglist-debian.txt" ]]; then
+                sudo apt-get update
+                grep -vE '^\s*#|^\s*$' pkglist-debian.txt | xargs sudo apt-get install -y
+            else
+                echo -e "${RED}Warning: pkglist-debian.txt not found!${NC}"
+            fi
+            ;;
+            
+        gentoo)
+            if [[ -f "pkglist-gentoo.txt" ]]; then
+                grep -vE '^\s*#|^\s*$' pkglist-gentoo.txt | xargs sudo emerge -av --noreplace
+            else
+                echo -e "${RED}Warning: pkglist-gentoo.txt not found!${NC}"
+            fi
+            ;;
+
+        *)
+            echo -e "${RED}Unsupported OS: $OS. Please install dependencies manually.${NC}"
+            echo -ne "Do you wish to continue with config deployment anyway? (y/n): "
+            read -r continue_ans
+            if [[ ! "$continue_ans" =~ ^[Yy]$ ]]; then
+                exit 1
+            fi
+            ;;
+    esac
+
+    echo -e "${BLUE}Checking for packages that require Cargo (Rust)...${NC}"
+    if command -v cargo &> /dev/null; then
+        export PATH="$HOME/.cargo/bin:$PATH"
+
+        for pkg in wallust swww; do
+            if ! command -v "$pkg" &> /dev/null; then
+                echo -e "${BLUE}Installing $pkg via cargo...${NC}"
+                if [[ "$pkg" == "swww" ]]; then
+                    cargo install --git https://github.com/LGFae/swww.git
+                else
+                    cargo install "$pkg"
+                fi
+            else
+                echo -e "${GREEN}$pkg is already installed.${NC}"
+            fi
+        done
     else
-        echo -e "${GREEN}cliphist is already installed.${NC}"
+        echo -e "${RED}Cargo is not installed. Skipping wallust and swww.${NC}"
     fi
 
-    if ! grep -q 'export PATH="$HOME/go/bin:$PATH"' ~/.bashrc; then
-        echo 'export PATH="$HOME/go/bin:$PATH"' >> ~/.bashrc
+    echo -e "${BLUE}Checking for packages that require Go...${NC}"
+    if command -v go &> /dev/null; then
+        GOPATH=$(go env GOPATH 2>/dev/null || echo "$HOME/go")
+        export PATH="$GOPATH/bin:$PATH"
+
+        if ! command -v cliphist &> /dev/null; then
+            echo -e "${BLUE}Installing cliphist via Go...${NC}"
+            go install go.senan.xyz/cliphist@latest
+        else
+            echo -e "${GREEN}cliphist is already installed.${NC}"
+        fi
+    else
+        echo -e "${RED}Go is not installed. Skipping cliphist.${NC}"
     fi
-    if [ -f ~/.zshrc ] && ! grep -q 'export PATH="$HOME/go/bin:$PATH"' ~/.zshrc; then
-        echo 'export PATH="$HOME/go/bin:$PATH"' >> ~/.zshrc
+
+    if command -v flatpak &> /dev/null; then
+        if [[ -f "flatpak.txt" ]]; then
+            echo -e "${BLUE}Installing flatpak packages...${NC}"
+            sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+            grep -vE '^\s*#|^\s*$' flatpak.txt | xargs sudo flatpak install -y flathub
+        else
+            echo -e "${RED}Warning: flatpak.txt not found!${NC}"
+        fi
+    else
+        echo -e "${RED}Warning: flatpak is not installed. Skipping flatpak dependencies.${NC}"
     fi
-else
-    echo -e "${RED}Go is not installed. Cliphist could not be verified or installed.${NC}"
 fi
 
-if ! command -v flatpak &> /dev/null; then
-    echo -e "${RED}Error: flatpak is not installed.${NC}"
-    exit 1
-fi
-
-if [ -f "flatpak.txt" ]; then
-    echo -e "${BLUE}Installing packages from flatpak.txt using flatpak...${NC}"
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    cat flatpak.txt | xargs flatpak install -y
-else
-    echo -e "${RED}Error: flatpak.txt not found!${NC}"
-    exit 1
-fi
+# ==============================================================================
+# CONFIG DEPLOYMENT (Both Minimal & Compilation)
+# ==============================================================================
 
 backup_config() {
-    if [ -d "$1" ]; then
-        BACKUP_NAME="${1}_backup_$(date +%Y%m%d_%H%M%S)"
-        echo -e "${BLUE}Backing up existing $(basename $1) to $(basename $BACKUP_NAME)${NC}"
-        mv "$1" "$BACKUP_NAME"
+    local target_dir="$1"
+    local source_dir="$2"
+
+    if [[ -d "$target_dir" ]]; then
+        if [[ -d "$source_dir" ]]; then
+            if diff -rq "$target_dir" "$source_dir" >/dev/null 2>&1; then
+                echo -e "${GREEN}$(basename "$target_dir") is already up-to-date. Skipping backup.${NC}"
+                return 1
+            fi
+        fi
+
+        local base_name=$(basename "$target_dir")
+        local backup_name="${target_dir}_backup_$(date +%Y%m%d_%H%M%S)"
+        echo -e "${BLUE}Modifications detected. Backing up existing $base_name to $(basename "$backup_name")${NC}"
+        mv "$target_dir" "$backup_name"
     fi
+    return 0
 }
 
 CONFIGS=(btop cava fastfetch hypr hypremoji kitty rofi swaync systemd wallpapers wallust waybar)
-for conf in "${CONFIGS[@]}"; do
-    backup_config "$HOME/.config/$conf"
-done
 
 echo -e "${BLUE}Deploying configuration files...${NC}"
-mkdir -p ~/.config
-cp -rv .config ~/
+mkdir -p "$HOME/.config"
 
-MAPFILE=($(hyprctl monitors | grep "Monitor" | awk '{print $2}'))
-MONITOR_COUNT=${#MAPFILE[@]}
+for conf in "${CONFIGS[@]}"; do
+    backup_config "$HOME/.config/$conf" ".config/$conf"
+    if [[ $? -eq 0 ]]; then
+        if [[ -d ".config/$conf" ]]; then
+            cp -r ".config/$conf" "$HOME/.config/" 2>/dev/null
+            echo -e "  Copied new $conf config."
+        else
+            echo -e "${RED}  Warning: .config/$conf missing in source directory.${NC}"
+        fi
+    fi
+done
 
-if [ "$MONITOR_COUNT" -gt 0 ]; then
-    PRIMARY_MONITOR=${MAPFILE[0]}
-    echo -e "${BLUE}Detected $MONITOR_COUNT monitor(s). Primary: $PRIMARY_MONITOR${NC}"
+echo -e "${BLUE}Finalizing directory structure...${NC}"
+mkdir -p "$HOME/.config"
 
-    sed -i "s/eDP-1/$PRIMARY_MONITOR/g" "$HOME/.config/hypr/configs/monitors.conf"
+if [[ -d ".config" ]]; then
+    cp -rv .config/* "$HOME/.config/" 2>/dev/null || echo -e "${RED}Warning: Some configs failed to copy.${NC}"
+else
+    echo -e "${RED}Error: .config directory not found in the source repository! Skipping configuration copy.${NC}"
+fi
 
-    if [ "$MONITOR_COUNT" -ge 2 ]; then
-        SECONDARY_MONITOR=${MAPFILE[1]}
-        echo -e "${BLUE}Secondary monitor detected: $SECONDARY_MONITOR${NC}"
-        sed -i "s/DP-1/$SECONDARY_MONITOR/g" "$HOME/.config/hypr/configs/monitors.conf"
+echo -e "${BLUE}Detecting monitors...${NC}"
+declare -a MONITOR_LIST
+
+if [[ -n "$HYPRLAND_INSTANCE_SIGNATURE" ]] && command -v hyprctl &> /dev/null; then
+    echo -e "${BLUE}Active Hyprland session detected. Using hyprctl...${NC}"
+    mapfile -t MONITOR_LIST < <(hyprctl monitors | awk '/Monitor/ {print $2}')
+else
+    echo -e "${BLUE}Hyprland is not running. Querying sysfs for hardware...${NC}"
+    for f in /sys/class/drm/*/status; do
+        if grep -q "^connected$" "$f" 2>/dev/null; then
+            dir=$(dirname "$f")
+            name=$(basename "$dir")
+            
+            monitor_name=$(echo "$name" | sed -E 's/^card[0-9]+-//')
+            
+            if [[ ! " ${MONITOR_LIST[*]} " =~ " ${monitor_name} " ]]; then
+                MONITOR_LIST+=("$monitor_name")
+            fi
+        fi
+    done
+fi
+
+MONITOR_COUNT=${#MONITOR_LIST[@]}
+MONITOR_CONF="$HOME/.config/hypr/configs/monitors.conf"
+
+if [[ "$MONITOR_COUNT" -gt 0 ]] && [[ -f "$MONITOR_CONF" ]]; then
+    PRIMARY_MONITOR=${MONITOR_LIST[0]}
+    echo -e "${GREEN}Detected $MONITOR_COUNT monitor(s). Primary: $PRIMARY_MONITOR${NC}"
+
+    sed -i "s/__PRIMARY_MONITOR__/$PRIMARY_MONITOR/g" "$MONITOR_CONF"
+
+    if [[ "$MONITOR_COUNT" -ge 2 ]]; then
+        SECONDARY_MONITOR=${MONITOR_LIST[1]}
+        echo -e "${GREEN}Secondary monitor detected: $SECONDARY_MONITOR${NC}"
+        sed -i "s/__SECONDARY_MONITOR__/$SECONDARY_MONITOR/g" "$MONITOR_CONF"
     else
         echo -e "${BLUE}Only one monitor detected. Disabling secondary monitor line...${NC}"
-        sed -i '/monitor=DP-1/s/^/#/' "$HOME/.config/hypr/configs/monitors.conf"
+        sed -i '/monitor=__SECONDARY_MONITOR__/s/^/#/' "$MONITOR_CONF"
     fi
+elif [[ ! -f "$MONITOR_CONF" ]]; then
+    echo -e "${RED}Warning: $MONITOR_CONF not found. Skipping monitor setup.${NC}"
+else
+    echo -e "${RED}Warning: Could not automatically detect any monitors.${NC}"
 fi
 
 SEARCH="/home/nekorosys"
-REPLACE="/home/$USER"
+REPLACE="$HOME"
 
-echo -e "${BLUE}Replacing $SEARCH with $REPLACE in config files...${NC}"
-find "$HOME/.config" -type f -print0 2>/dev/null | xargs -0 -r sed -i "s|$SEARCH|$REPLACE|g" 2>/dev/null
+echo -e "${BLUE}Replacing hardcoded paths... ($SEARCH -> $REPLACE)...${NC}"
+find "$HOME/.config" -type f \( -name "*.config" -o -name "*.css" -o -name "*.rasi" -o -name "*.conf" -o -name "*.sh" -o -name "*.json" -o -name "*.jsonc" -o -name "*.lua" -o -name "*.py" -o -name "*.yaml" \) -print0 2>/dev/null | xargs -0 -r sed -i "s|$SEARCH|$REPLACE|g"
 
-if command -v "bash" >/dev/null 2>&1; then
-    echo "bash is installed. Appending paths..."
-    grep -v -x -f ~/.bashrc .bashrc >> ~/.bashrc
+inject_shell_config() {
+    local shell_rc="$1"
+    local source_rc="$2"
+    
+    local go_bin_path
+    if command -v go &> /dev/null; then
+        go_bin_path="$(go env GOPATH 2>/dev/null || echo "$HOME/go")/bin"
+    else
+        go_bin_path="$HOME/go/bin"
+    fi
+    
+    if [[ -f "$shell_rc" ]]; then
+        sed -i '/# --- NeKoRoSHELL START ---/,/# --- NeKoRoSHELL END ---/d' "$shell_rc"
+        echo -e "\n# --- NeKoRoSHELL START ---" >> "$shell_rc"
+        [[ -f "$source_rc" ]] && cat "$source_rc" >> "$shell_rc"
+        echo "export PATH=\"\$HOME/bin:\$HOME/.local/bin:\$HOME/.cargo/bin:$go_bin_path:\$PATH\"" >> "$shell_rc"
+        echo -e "# --- NeKoRoSHELL END ---" >> "$shell_rc"
+        echo -e "${GREEN}Updated $shell_rc${NC}"
+    fi
+}
+
+inject_shell_config "$HOME/.bashrc" ".bashrc"
+inject_shell_config "$HOME/.zshrc" ".zshrc"
+
+[[ -f .p10k.zsh ]] && cp .p10k.zsh "$HOME/"
+[[ -f .face.icon ]] && cp .face.icon "$HOME/"
+[[ -f change-avatar.sh ]] && cp change-avatar.sh "$HOME/"
+[[ -d bin ]] && cp -r bin "$HOME/"
+
+# ==============================================================================
+# DOWNLOADING & COMPILING (Compilation Mode Only)
+# ==============================================================================
+
+if [[ "$INSTALL_TYPE" == "compilation" ]]; then
+    if ! command -v hyprshot &> /dev/null; then
+        echo -e "${BLUE}Downloading hyprshot...${NC}"
+        mkdir -p "$HOME/bin"
+        curl -sLo "$HOME/bin/hyprshot" https://raw.githubusercontent.com/Gustash/Hyprshot/main/hyprshot
+        chmod +x "$HOME/bin/hyprshot"
+    fi
+
+    if [[ ! -d "$HOME/powerlevel10k" ]]; then
+        echo -e "${BLUE}Cloning Powerlevel10k theme...${NC}"
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
+    fi
+
+    if ! command -v g++ &> /dev/null; then
+        echo -e "${RED}g++ is not installed. Please install build tools (e.g., build-essential or base-devel) to compile the C++ daemons.${NC}"
+    elif ! command -v pkg-config &> /dev/null; then
+        echo -e "${RED}pkg-config is not installed. Cannot verify C++ header dependencies.${NC}"
+    else
+        echo -e "${BLUE}Checking C++ build dependencies...${NC}"
+        
+        REQUIRED_LIBS="wayland-client" 
+        
+        if ! pkg-config --exists $REQUIRED_LIBS; then
+            echo -e "${RED}Missing required C++ development headers: $REQUIRED_LIBS${NC}"
+            echo -e "${RED}Please install the corresponding -dev / -devel packages. Compilation aborted.${NC}"
+        else
+            echo -e "${BLUE}Compiling C++ Daemons...${NC}"
+            mkdir -p "$HOME/bin"
+            
+            LIBS=$(pkg-config --cflags --libs $REQUIRED_LIBS)
+            
+            if [[ -f "bin/source/navbar-hover.cpp" ]]; then
+                g++ -O3 -o "$HOME/bin/navbar-hover" bin/source/navbar-hover.cpp $LIBS
+                echo -e "${GREEN}Successfully compiled navbar-hover.${NC}"
+            else
+                echo -e "${RED}Warning: bin/source/navbar-hover.cpp not found.${NC}"
+            fi
+            
+            if [[ -f "bin/source/navbar-watcher.cpp" ]]; then
+                g++ -O3 -o "$HOME/bin/navbar-watcher" bin/source/navbar-watcher.cpp $LIBS
+                echo -e "${GREEN}Successfully compiled navbar-watcher.${NC}"
+            else
+                echo -e "${RED}Warning: bin/source/navbar-watcher.cpp not found.${NC}"
+            fi
+        fi
+    fi
 fi
 
-if command -v "zsh" >/dev/null 2>&1; then
-    echo "zsh is installed. Appending paths..."
-    grep -v -x -f ~/.zshrc .zshrc >> ~/.zshrc
-fi
-
-cp -r .p10k.zsh ~/
-cp .face.icon ~/
-cp change-avatar.sh ~/
-cp -r bin ~/
-
-if ! command -v hyprshot &> /dev/null; then
-    echo -e "${BLUE}Downloading hyprshot...${NC}"
-    mkdir -p ~/bin
-    curl -sLo ~/bin/hyprshot https://raw.githubusercontent.com/Gustash/Hyprshot/main/hyprshot
-    chmod +x ~/bin/hyprshot
-fi
-
-if [ ! -d "$HOME/powerlevel10k" ]; then
-    echo -e "${BLUE}Cloning Powerlevel10k theme...${NC}"
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-fi
-
-echo -e "${BLUE}Compiling C++ Daemons...${NC}"
-g++ -O3 -o ~/bin/navbar-hover bin/source/navbar-hover.cpp
-g++ -O3 -o ~/bin/navbar-watcher bin/source/navbar-watcher.cpp
+# ==============================================================================
+# PERMISSIONS & SERVICES (Both Minimal & Compilation)
+# ==============================================================================
 
 echo -e "${BLUE}Setting script permissions...${NC}"
-find ~/.config/ -name "*.sh" -exec chmod +x {} + 2>/dev/null
-find ~/bin/ -name "*.sh" -exec chmod +x {} + 2>/dev/null
-find ~/bin/ -name "*" -exec chmod +x {} + 2>/dev/null
-
-if command -v "systemctl" >/dev/null 2>&1; then
-    echo -e "${BLUE}Enabling waybar...${NC}"
-    systemctl --user enable waybar.service
-    echo -e "${BLUE}Enabling SwayNC...${NC}"
-    systemctl --user enable swaync.service
-else
-    echo -e "${RED}Cannot run command 'systemctl'. Please enable the waybar and SwayNC services manually.${NC}"
+find "$HOME/.config/" -type f -name "*.sh" -exec chmod +x {} + 2>/dev/null
+if [[ -d "$HOME/bin" ]]; then
+    find "$HOME/bin/" -type f -exec chmod +x {} + 2>/dev/null
 fi
 
-echo -e "${GREEN}Installation complete! Please restart your session.${NC}"
+if command -v systemctl >/dev/null 2>&1; then
+    echo -e "${BLUE}Enabling Wayland services...${NC}"
+    systemctl --user daemon-reload
+    systemctl --user enable waybar.service 2>/dev/null
+    systemctl --user enable swaync.service 2>/dev/null
+else
+    echo -e "${RED}Cannot run systemctl. Please enable waybar and SwayNC manually.${NC}"
+fi
+
+# ==============================================================================
+# FINAL VERIFICATION
+# ==============================================================================
+
+echo -e "\n${BLUE}Performing final system check...${NC}"
+CORE_CMDS=("hyprland" "btop" "cava" "fastfetch" "hypremoji" "waybar" "swaync" "rofi" "kitty" "wallust" "swww")
+MISSING=0
+
+for cmd in "${CORE_CMDS[@]}"; do
+    if command -v "$cmd" &> /dev/null; then
+        echo -e "  [${GREEN}OK${NC}] $cmd is installed."
+    else
+        echo -e "  [${RED}!!${NC}] $cmd is missing from PATH."
+        MISSING=$((MISSING + 1))
+    fi
+done
+
+if [[ "$MISSING" -eq 0 ]]; then
+    echo -e "\n${GREEN}Everything looks good! NeKoRoSHELL is ready.${NC}"
+else
+    echo -e "\n${RED}Warning: $MISSING core component(s) were not found.${NC}"
+    echo -e "If you chose 'Minimal', this is expected. Otherwise, check the logs above."
+fi
+
+echo -e "${GREEN}Installation complete! Please restart your session to apply all changes.${NC}"
