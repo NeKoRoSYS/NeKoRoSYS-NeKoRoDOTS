@@ -27,14 +27,12 @@ if command -v wallust >/dev/null 2>&1; then
 	systemctl --user stop navbar.service navbar-watcher.service navbar-hover.service
 
 	if [ "$current_theme" = "Dark" ]; then
-		wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-dark.toml || wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-dark.toml -b full
-		echo "@define-color text #F5F5F5;" >> $waybar_colors
-		echo "@define-color text-invert #121212;" >> $waybar_colors	
+		wallust run "$TARGET_IMG" -q -C ~/.config/wallust/wallust-dark.toml || wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-dark.toml -b full
+		printf "@define-color text #F5F5F5;\n@define-color text-invert #121212;\n" >> "$waybar_colors"
 		echo "* { text: #F5F5F5; text-invert: #121212; }" >> "$rofi_colors"
 	else
-		wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-light.toml || wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-light.toml -b full
-		echo "@define-color text-invert #F5F5F5;" >> $waybar_colors	
-		echo "@define-color text #121212;" >> $waybar_colors
+		wallust run "$TARGET_IMG" -q -C ~/.config/wallust/wallust-light.toml || wallust run $TARGET_IMG -q -C ~/.config/wallust/wallust-light.toml -b full
+		printf "@define-color text-invert #F5F5F5;\n@define-color text #121212;\n" >> "$waybar_colors"
 		echo "* { text: #121212; text-invert: #F5F5F5; }" >> "$rofi_colors"
 	fi
 

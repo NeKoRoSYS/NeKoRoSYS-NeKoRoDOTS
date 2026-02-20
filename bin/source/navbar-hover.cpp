@@ -42,6 +42,14 @@ std::string exec(const char* cmd) {
     return result;
 }
 
+int parse_int_value(const std::string& json, size_t pos) {
+    while (pos < json.length() && !isdigit(json[pos]) && json[pos] != '-') {
+        pos++;
+    }
+    if (pos >= json.length()) return -999;
+    return std::stoi(json.substr(pos));
+}
+
 bool is_bar_visible = false; 
 
 void toggle_waybar(bool visible) {
@@ -80,11 +88,25 @@ Config read_config() {
 
 std::vector<Monitor> get_monitors() {
     std::vector<Monitor> monitors;
-    std::string output = exec("hyprctl monitors -j | jq -r '.[] | \"\\(.x) \\(.y) \\(.width) \\(.height)\"'");
-    std::stringstream ss(output);
-    int x, y, w, h;
-    while (ss >> x >> y >> w >> h) {
-        monitors.push_back({x, y, w, h});
+    std::string mon_out = exec("hyprctl -j monitors");
+    
+    size_t pos = 0;
+    while ((pos = mon_out.find("\"width\":", pos)) != std::string::npos) {
+        int w = parse_int_value(mon_out, pos + 8);
+        
+        pos = mon_out.find("\"height\":", pos);
+        int h = parse_int_value(mon_out, pos + 9);
+        
+        pos = mon_out.find("\"x\":", pos);
+        int x = parse_int_value(mon_out, pos + 4);
+        
+        pos = mon_out.find("\"y\":", pos);
+        int y = parse_int_value(mon_out, pos + 4);
+        
+        if (x != -999 && y != -999 && w != -999 && h != -999) {
+            monitors.push_back({x, y, w, h});
+        }
+        pos++;
     }
     return monitors;
 }
@@ -188,7 +210,7 @@ int main() {
             }
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
 
     return 0;

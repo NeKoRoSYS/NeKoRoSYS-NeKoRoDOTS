@@ -1,4 +1,7 @@
 #include <iostream>
+#include <cerrno>
+#include <csignal>
+#include <sys/wait.h>
 #include <vector>
 #include <string>
 #include <cstring>
@@ -43,15 +46,20 @@ void set_waybar(bool visible) {
 
     if (visible) {
         if (!process_running) {
-            system("waybar &");
+            pid_t pid = fork();
+            if (pid == 0) {
+                char* args[] = {(char*)"waybar", nullptr};
+                execvp(args[0], args);
+                exit(1); // Exit if execvp fails
+            }
             is_waybar_visible = true;
         } else if (!is_waybar_visible) {
-            system("pkill -SIGUSR1 waybar");
+            system("killall -q -SIGUSR1 waybar");
             is_waybar_visible = true;
         }
     } else {
         if (process_running && is_waybar_visible) {
-            system("pkill -SIGUSR1 waybar");
+            system("killall -q -SIGUSR1 waybar");
             is_waybar_visible = false;
         }
     }
@@ -147,7 +155,12 @@ int main() {
                 check_and_update();
             }
         } else if (num_read == -1) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            } else {
+                std::cerr << "Socket disconnected. Exiting to allow systemd to restart." << std::endl;
+                break;
+            }
         } else {
             break;
         }

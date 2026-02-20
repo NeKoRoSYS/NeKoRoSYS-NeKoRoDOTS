@@ -33,7 +33,7 @@ fi
 
 if [ -f "pkglist.txt" ]; then
     echo -e "${BLUE}Installing packages from pkglist.txt...${NC}"
-    yay -S --needed --noconfirm $(cat pkglist.txt)
+    yay -S --needed --noconfirm - < pkglist.txt
 else
     echo -e "${RED}Warning: pkglist.txt not found! Skipping system pkgs.${NC}"
 fi
@@ -55,18 +55,10 @@ backup_config() {
     fi
 }
 
-backup_config ~/.config/btop
-backup_config ~/.config/cava
-backup_config ~/.config/fastfetch
-backup_config ~/.config/hypr
-backup_config ~/.config/hypremoji
-backup_config ~/.config/kitty
-backup_config ~/.config/rofi
-backup_config ~/.config/swaync
-backup_config ~/.config/systemd
-backup_config ~/.config/wallpapers
-backup_config ~/.config/wallust
-backup_config ~/.config/waybar
+CONFIGS=(btop cava fastfetch hypr hypremoji kitty rofi swaync systemd wallpapers wallust waybar)
+for conf in "${CONFIGS[@]}"; do
+    backup_config "$HOME/.config/$conf"
+done
 
 echo -e "${BLUE}Deploying configuration files...${NC}"
 mkdir -p ~/.config
@@ -117,7 +109,7 @@ find ~/.config/ -name "*.sh" -exec chmod +x {} + 2>/dev/null
 find ~/bin/ -name "*.sh" -exec chmod +x {} + 2>/dev/null
 find ~/bin/ -name "*" -exec chmod +x {} + 2>/dev/null
 echo -e "${BLUE}Enabling waybar...${NC}"
-sudo systemctl enable ~/.config/systemd/user/waybar.service
+systemctl --user enable waybar.service
 echo -e "${BLUE}Enabling SwayNC...${NC}"
 systemctl --user enable swaync.service
 
