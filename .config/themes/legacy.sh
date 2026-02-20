@@ -1,1 +1,1 @@
-quick-theme random legacy legacy legacy.conf legacy
+quick-theme random legacy legacy legacy legacy
