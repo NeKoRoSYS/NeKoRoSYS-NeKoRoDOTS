@@ -112,7 +112,7 @@ NeKoRoSHELL is currently being developed by one person (*cough* [CONTRIBUTING](h
 | Color Handling - Replace pywal6 with wallust | ✅ |
 | Dmenu Overhaul - Replace wofi with rofi | ✅ |
 | Support for other distros; BETA, see [CONTRIBUTING](https://github.com/NeKoRoSYS/NeKoRoSHELL/tree/main?tab=contributing-ov-file#) | 🔍 |
-| Theme System - Set all skins in one go | 🛠 |
+| Theme System - Set all skins in one go | ✅ |
 | wlogout integration | ⏳ |
 | Qt and Kvantum integration | 🤔 |
 | Quickshell integration | 🤔 |
