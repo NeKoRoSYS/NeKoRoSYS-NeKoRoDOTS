@@ -109,7 +109,7 @@ NeKoRoSHELL is currently being developed by one person (*cough* [CONTRIBUTING](h
 | Optimizations | ✅ |
 | Color Handling - Replace pywal6 with wallust | ✅ |
 | Dmenu Overhaul - Replace wofi with rofi | ✅ |
-| Support for other distros | ⏳ |
+| Support for other distros; BETA, see [CONTRIBUTING](https://github.com/NeKoRoSYS/NeKoRoSHELL/tree/main?tab=contributing-ov-file#) | 🔍 |
 | Qt and Kvantum integration | 🤔 |
 | Quickshell integration | 🤔 |
 
