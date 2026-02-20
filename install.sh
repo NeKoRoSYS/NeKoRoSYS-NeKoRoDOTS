@@ -56,7 +56,7 @@ case "$OS" in
 
     fedora)
         if [ -f "pkglist-fedora.txt" ]; then
-            sudo dnf install -y $(cat pkglist-fedora.txt)
+            grep -vE '^\s*#|^\s*$' pkglist-fedora.txt | xargs sudo dnf install -y
         else
             echo -e "${RED}pkglist-fedora.txt not found!${NC}"
         fi
@@ -68,7 +68,7 @@ case "$OS" in
         sleep 3
         if [ -f "pkglist-debian.txt" ]; then
             sudo apt-get update
-            sudo apt-get install -y $(cat pkglist-debian.txt)
+            grep -vE '^\s*#|^\s*$' pkglist-debian.txt | xargs sudo apt-get install -y
         else
             echo -e "${RED}pkglist-debian.txt not found!${NC}"
         fi
@@ -76,7 +76,7 @@ case "$OS" in
         
     gentoo)
         if [ -f "pkglist-gentoo.txt" ]; then
-            sudo emerge -av --noreplace $(cat pkglist-gentoo.txt)
+            grep -vE '^\s*#|^\s*$' pkglist-gentoo.txt | xargs sudo emerge -av --noreplace
         else
             echo -e "${RED}pkglist-gentoo.txt not found!${NC}"
         fi
@@ -149,7 +149,7 @@ fi
 if [ -f "flatpak.txt" ]; then
     echo -e "${BLUE}Installing packages from flatpak.txt using flatpak...${NC}"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    cat flatpak.txt | xargs flatpak install -y
+    grep -vE '^\s*#|^\s*$' flatpak.txt | xargs flatpak install -y
 else
     echo -e "${RED}Error: flatpak.txt not found!${NC}"
     exit 1
@@ -172,39 +172,67 @@ echo -e "${BLUE}Deploying configuration files...${NC}"
 mkdir -p ~/.config
 cp -rv .config ~/
 
-MAPFILE=($(hyprctl monitors | grep "Monitor" | awk '{print $2}'))
-MONITOR_COUNT=${#MAPFILE[@]}
+echo -e "${BLUE}Detecting monitors...${NC}"
+
+declare -a MONITOR_LIST
+
+if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ] && command -v hyprctl &> /dev/null; then
+    echo -e "${BLUE}Active Hyprland session detected. Using hyprctl...${NC}"
+    mapfile -t MONITOR_LIST < <(hyprctl monitors | awk '/Monitor/ {print $2}')
+else
+    echo -e "${BLUE}Hyprland is not running. Querying sysfs for hardware...${NC}"
+    for f in /sys/class/drm/*/status; do
+        if grep -q "^connected$" "$f" 2>/dev/null; then
+            dir=$(dirname "$f")
+            name=$(basename "$dir")
+            monitor_name="${name#*-}"
+            if [[ ! " ${MONITOR_LIST[*]} " =~ " ${monitor_name} " ]]; then
+                MONITOR_LIST+=("$monitor_name")
+            fi
+        fi
+    done
+fi
+
+MONITOR_COUNT=${#MONITOR_LIST[@]}
 
 if [ "$MONITOR_COUNT" -gt 0 ]; then
-    PRIMARY_MONITOR=${MAPFILE[0]}
-    echo -e "${BLUE}Detected $MONITOR_COUNT monitor(s). Primary: $PRIMARY_MONITOR${NC}"
+    PRIMARY_MONITOR=${MONITOR_LIST[0]}
+    echo -e "${GREEN}Detected $MONITOR_COUNT monitor(s). Primary: $PRIMARY_MONITOR${NC}"
 
     sed -i "s/eDP-1/$PRIMARY_MONITOR/g" "$HOME/.config/hypr/configs/monitors.conf"
 
     if [ "$MONITOR_COUNT" -ge 2 ]; then
-        SECONDARY_MONITOR=${MAPFILE[1]}
-        echo -e "${BLUE}Secondary monitor detected: $SECONDARY_MONITOR${NC}"
+        SECONDARY_MONITOR=${MONITOR_LIST[1]}
+        echo -e "${GREEN}Secondary monitor detected: $SECONDARY_MONITOR${NC}"
         sed -i "s/DP-1/$SECONDARY_MONITOR/g" "$HOME/.config/hypr/configs/monitors.conf"
     else
         echo -e "${BLUE}Only one monitor detected. Disabling secondary monitor line...${NC}"
         sed -i '/monitor=DP-1/s/^/#/' "$HOME/.config/hypr/configs/monitors.conf"
     fi
+else
+    echo -e "${RED}Warning: Could not automatically detect any monitors. You may need to manually edit ~/.config/hypr/configs/monitors.conf${NC}"
 fi
 
 SEARCH="/home/nekorosys"
-REPLACE="/home/$USER"
+REPLACE="$HOME"
 
 echo -e "${BLUE}Replacing $SEARCH with $REPLACE in config files...${NC}"
 find "$HOME/.config" -type f -print0 2>/dev/null | xargs -0 -r sed -i "s|$SEARCH|$REPLACE|g" 2>/dev/null
 
 if command -v "bash" >/dev/null 2>&1; then
     echo "bash is installed. Appending paths..."
-    grep -v -x -f ~/.bashrc .bashrc >> ~/.bashrc
+    if ! grep -q "# NeKoRoSHELL Configs" ~/.bashrc; then
+        echo -e "\n# NeKoRoSHELL Configs" >> ~/.bashrc
+        cat .bashrc >> ~/.bashrc
+    fi
 fi
 
 if command -v "zsh" >/dev/null 2>&1; then
     echo "zsh is installed. Appending paths..."
-    grep -v -x -f ~/.zshrc .zshrc >> ~/.zshrc
+    if ! grep -q "# NeKoRoSHELL Configs" ~/.zshrc; then
+        echo -e "\n# NeKoRoSHELL Configs" >> ~/.zshrc
+        cat .zshrc >> ~/.zshrc
+    fi
 fi
 
 cp -r .p10k.zsh ~/
@@ -224,9 +252,13 @@ if [ ! -d "$HOME/powerlevel10k" ]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 fi
 
-echo -e "${BLUE}Compiling C++ Daemons...${NC}"
-g++ -O3 -o ~/bin/navbar-hover bin/source/navbar-hover.cpp
-g++ -O3 -o ~/bin/navbar-watcher bin/source/navbar-watcher.cpp
+if ! command -v g++ &> /dev/null; then
+    echo -e "${RED}g++ is not installed. Please install it (e.g., build-essential) to compile the navbar daemons.${NC}"
+else
+    echo -e "${BLUE}Compiling C++ Daemons...${NC}"
+    g++ -O3 -o ~/bin/navbar-hover bin/source/navbar-hover.cpp
+    g++ -O3 -o ~/bin/navbar-watcher bin/source/navbar-watcher.cpp
+fi
 
 echo -e "${BLUE}Setting script permissions...${NC}"
 find ~/.config/ -name "*.sh" -exec chmod +x {} + 2>/dev/null
