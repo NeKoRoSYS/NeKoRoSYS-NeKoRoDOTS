@@ -152,7 +152,8 @@ if [[ "$INSTALL_TYPE" == "compilation" ]]; then
 
     echo -e "${BLUE}Checking for packages that require Go...${NC}"
     if command -v go &> /dev/null; then
-        export PATH="$HOME/go/bin:$PATH"
+        GOPATH=$(go env GOPATH 2>/dev/null || echo "$HOME/go")
+        export PATH="$GOPATH/bin:$PATH"
 
         if ! command -v cliphist &> /dev/null; then
             echo -e "${BLUE}Installing cliphist via Go...${NC}"
@@ -198,7 +199,12 @@ done
 
 echo -e "${BLUE}Deploying configuration files...${NC}"
 mkdir -p "$HOME/.config"
-cp -rv .config/* "$HOME/.config/" 2>/dev/null || echo -e "${RED}Warning: Some configs missing in source directory.${NC}"
+
+if [[ -d ".config" ]]; then
+    cp -rv .config/* "$HOME/.config/" 2>/dev/null || echo -e "${RED}Warning: Some configs failed to copy.${NC}"
+else
+    echo -e "${RED}Error: .config directory not found in the source repository! Skipping configuration copy.${NC}"
+fi
 
 echo -e "${BLUE}Detecting monitors...${NC}"
 declare -a MONITOR_LIST
@@ -212,7 +218,9 @@ else
         if grep -q "^connected$" "$f" 2>/dev/null; then
             dir=$(dirname "$f")
             name=$(basename "$dir")
-            monitor_name="${name#*-}"
+            
+            monitor_name=$(echo "$name" | sed -E 's/^card[0-9]+-//')
+            
             if [[ ! " ${MONITOR_LIST[*]} " =~ " ${monitor_name} " ]]; then
                 MONITOR_LIST+=("$monitor_name")
             fi
@@ -253,12 +261,19 @@ inject_shell_config() {
     local shell_rc="$1"
     local source_rc="$2"
     
+    local go_bin_path
+    if command -v go &> /dev/null; then
+        go_bin_path="$(go env GOPATH 2>/dev/null || echo "$HOME/go")/bin"
+    else
+        go_bin_path="$HOME/go/bin"
+    fi
+    
     if [[ -f "$shell_rc" ]]; then
         if ! grep -q "# --- NeKoRoSHELL START ---" "$shell_rc"; then
             echo -e "\n# --- NeKoRoSHELL START ---" >> "$shell_rc"
             [[ -f "$source_rc" ]] && cat "$source_rc" >> "$shell_rc"
             
-            echo 'export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"' >> "$shell_rc"
+            echo "export PATH=\"\$HOME/bin:\$HOME/.local/bin:\$HOME/.cargo/bin:$go_bin_path:\$PATH\"" >> "$shell_rc"
             echo -e "# --- NeKoRoSHELL END ---" >> "$shell_rc"
             echo -e "${GREEN}Updated $shell_rc${NC}"
         fi
