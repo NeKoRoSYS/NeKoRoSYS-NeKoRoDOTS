@@ -17,7 +17,7 @@
 
 </div>
 
-The best way to say "I use Arch btw 🤓" is if your desktop profile looks sleek and suave.
+The best way to say "I use Linux btw 🤓" is if your desktop profile looks sleek and suave.
 
 **NeKoRoSHELL** aims to provide an out-of-the-box, clean and reliable, generic, and modular framework that lets you easily customize your desktop experience with simple UI design philosophy in mind.
 <br>
@@ -37,13 +37,11 @@ NeKoRoSHELL focuses on simplicity and modularity.
 <br>
 
 The following are what NeKoRoSHELL currently offers:
-- **One-tap Installer Script**
+- **Distro-agnostic Installer Script**
   - Use `git clone https://github.com/NeKoRoSYS/NeKoRoSHELL`
   - Then `cd NeKoRoSHELL`
   - and finally, `bash install.sh` to install the dotfiles.
-    - You can freely customize `flatpak.txt` and `pkglist.txt` before running `install.sh`.
-    - The installer assumes you already installed `base-devel`, `git`, `yay`, `flatpak`.
-    - The installer assumes you have turned on mirror link downloads for `pacman`.
+    - You can freely customize `flatpak.txt` and `pkglist-DISTRO.txt` before running `install.sh`.
     - **The installer is safe.** It backs up your pre-existing .config folders. (If you have any)
     - The installer automatically handles assigning your monitors at `~/.config/hypr/configs/monitors.conf/` and replaces every occurence of `/home/nekorosys/` with your username for your own convenience.
    
@@ -111,7 +109,7 @@ NeKoRoSHELL is currently being developed by one person (*cough* [CONTRIBUTING](h
 | Optimizations | ✅ |
 | Color Handling - Replace pywal6 with wallust | ✅ |
 | Dmenu Overhaul - Replace wofi with rofi | ✅ |
-| Support for other distros | ⏳ |
+| Support for other distros; BETA, see [CONTRIBUTING](https://github.com/NeKoRoSYS/NeKoRoSHELL/tree/main?tab=contributing-ov-file#) | 🔍 |
 | Qt and Kvantum integration | 🤔 |
 | Quickshell integration | 🤔 |
 
@@ -150,28 +148,33 @@ You have two options:
 > The [System Booting](#system-booting) section contains settings specifically optimized for a dual-GPU laptop (Intel 620/Nvidia 940MX). 
 > **Do not** copy the `GRUB_CMDLINE_LINUX_DEFAULT` or `mkinitcpio` modules unless you have identical hardware, as this may **prevent your system from booting**.
 
+> [!WARNING]
+> **SOFTWARE SPECIFIC CONFIGURATION**<br>
+>
+> This project of mine was originally built only for Arch Linux but is now capable of claiming itself to be Distro-agnostic. However, **installation of this repo in other Linux Distros aside from Arch is more or less UNTESTED.** Please verify using `nano` or your preferred text-editor if your distro supports the packages listed at `pkglist-DISTRO.txt` or if the packages are named correctly.
+>
+> Normal incompatibilities include distros like Artix not being able to run `systemctl` because they use a different init system/manager. For those who experience something similar, manually enable SwayNC and waybar services yourself. Furthermore, some distros have outdated packages and may require building from git, cargo, or go.
+>
+> The installation system for that I implemented can be improved. If you're willing to help, please make a pull request. Your contributions are welcome and will be appreciated! :D
+
 - Auto-pause animated wallpapers via [mpvpaper-stop](https://github.com/pvtoari/mpvpaper-stop) (dependencies: cmake, cjson)
   - Used at `set-wallpaper.sh` and `check-video.sh` in `~/.config/hypr/scripts/wallpapers/` to save CPU/RAM usage.
  
 - This rice uses `rofi` to run actions and apps.
   - Some apps like `mpvpaper` needs to be ran using `prime-run` and `gamemoderun`
-    - Install via `sudo pacman -S nvidia-prime gamemode`.
-  - (Automatically provided by `pkglist.txt` if you used the `install.sh` bash file)
 
 - `hyprland` uses `hypridle` and `hyprlock`.
-  - Install them via `sudo pacman -S hyprlock hypridle`. (Automatically provided by `pkglist.txt` if you used the `install.sh` bash file)
 
 - Waybar was set up to use `kitty`, `Mozilla Firefox`, and `dolphin`. You can change this if you want at `~/.config/waybar/config.jsonc`.
 
 - The screenshot and clipboard features need `grim`, `slurp`, `hyprshot`, `wl-clipboard`, and `cliphist` to run.
-  - Install them via `sudo pacman -S grim wl-clipboard cliphist`. (Automatically provided by `pkglist.txt` if you used the `install.sh` bash file)
 <br>
 
 ## Optional
 
 Mostly personal notes just in case I switch over to another PC. Do NOT copy my Grub Linux CMDLINE and mkinitcpio modules unless you also have a laptop with old hybrid GPUs (Intel Graphics 620 and Nvidia GeForce 940mx).
 
-### System Booting
+### System Booting (Dualboot)
 - Use [MineGrub](https://github.com/Lxtharia/minegrub-world-sel-theme) theme for Grub.
 - Identify GPU names.
 - `/etc/modprobe.d/nvidia.conf`
@@ -183,7 +186,7 @@ Mostly personal notes just in case I switch over to another PC. Do NOT copy my G
   ```
   
 - Modify `/etc/default/grub`
-  - `sudo pacman -S os-prober`
+  - Install `os-prober`.
  
     ```
     GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet rd.udev.log_level=3 systemd.show_status=auto vt.global_cursor_default=0 nvidia_drm.modeset=1 nvidia_drm.fbdev=1 pci=noaer pcie_aspm=off nvme_core.default_ps_max_latency_us=0 nvidia.NVreg_EnableS0ixPowerManagement=1 intel_pstate=active i915.modeset=1 i915.enable_fbc=1 mitigations=off"
@@ -244,8 +247,5 @@ Mostly personal notes just in case I switch over to another PC. Do NOT copy my G
 ### Quality-of-Life
 - Install [Hypremoji](https://github.com/Musagy/hypremoji)
 - Install `blueman` and `r-quick-share` for seamless bluetooth support. (Works with Apple Airpods and android phone)
-- Fix waybar tray disappearing after a certain amount of time.
-  ```
-  yay -S sni-qt
-  ```
+- Fix waybar tray disappearing after a certain amount of time by installing `sni-qt`.
   Make sure you're not killing waybar using -SIGUSER2 when refreshing the config.
