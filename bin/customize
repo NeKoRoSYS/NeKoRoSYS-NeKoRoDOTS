@@ -1,49 +1,63 @@
 #!/bin/bash
 
+CMD_FEATURE=$1
+CMD_CHOICE=$2
+
 pkill -x rofi
 
+theme="Select Theme"
 wallpaper="Select Wallpaper"
 navbar="Select Navbar Skin"
 launcher="Select Launcher Skin"
 lockscreen="Select Lockscreen Layout"
 panel="Select Control Centre Layout"
-OPTIONS="$wallpaper\n$navbar\n$launcher\n$lockscreen\n$panel"
+OPTIONS="$theme\n$wallpaper\n$navbar\n$launcher\n$lockscreen\n$panel"
 
-CHOICE=$(echo -e "$OPTIONS" | rofi -dmenu -theme-str 'listview { lines: 5; scrollbar: false; }' -no-cache -p "Select Action")
-case "$CHOICE" in
-	"$wallpaper")
-		FEATURE=wallpaper
-		MODE=""
-		;;
-	"$navbar")
-		FEATURE=navbar
-		;;
-	"$launcher")
-		FEATURE=launcher
-		;;
-	"$lockscreen")
-		FEATURE=lockscreen
-		;;
-	"$panel")
-		FEATURE=panel
-		;;
-	*)
-		exit 1
-		;;
-esac
+if [ -n "$CMD_FEATURE" ]; then
+    FEATURE="$CMD_FEATURE"
+else
+    # Your original Rofi selection logic
+    CHOICE=$(echo -e "$OPTIONS" | rofi -dmenu -theme-str 'listview { lines: 6; scrollbar: false; }' -no-cache -p "Select Action")
+    case "$CHOICE" in
+	"$theme")	FEATURE=theme ;;
+        "$wallpaper")   FEATURE=wallpaper ;;
+        "$navbar")      FEATURE=navbar ;;
+        "$launcher")    FEATURE=launcher ;;
+        "$lockscreen")  FEATURE=lockscreen ;;
+        "$panel")       FEATURE=panel ;;
+        *)              exit 1 ;;
+    esac
+fi
 
 WAYBAR_MODE_FILE="$HOME/.cache/.waybar_mode"
 HYPR="$HOME/.config/hypr/configs/windowrules.conf"
 MANAGEMENT_MODE=$(cat "$WAYBAR_MODE_FILE" 2>/dev/null || echo "static")
 
 case $FEATURE in
+    theme)
+	THEME_DIR="$HOME/.config/themes"
+	
+	if [ ! -n "$2" ]; then        
+	    makenotif customize preferences-desktop-theme Theme "Select a theme." true
+        fi
+
+	CHOICE=${CMD_CHOICE:-$(ls "$THEME_DIR" | grep '\.sh$' | rofi -dmenu -p "Select Theme")}
+
+        if [ -n "$CHOICE" ]; then
+	    bash $THEME_DIR/$CHOICE
+            makenotif customize preferences-desktop-theme Theme "Theme changed to: ${CHOICE%}" true
+        fi
+	;;
+
     lockscreen)
         SKIN_DIR="$HOME/.config/hypr/hyprlock/skins"
         MAIN="$HOME/.config/hypr/hyprlock.conf"
-        
-        makenotif customize preferences-desktop-theme Lockscreen "Select a lockscreen layout." true
-        
-        CHOICE=$(ls "$SKIN_DIR" | grep '\.conf$' | rofi -dmenu -p "Select Lockscreen Layout")
+
+	if [ ! -n "$2" ]; then        
+	    makenotif customize preferences-desktop-theme Lockscreen "Select a lockscreen layout." true
+        fi
+
+	CHOICE=${CMD_CHOICE:-$(ls "$SKIN_DIR" | grep '\.conf$' | rofi -dmenu -p "Select Lockscreen Layout")}
 
         if [ -n "$CHOICE" ]; then
             echo "source = $SKIN_DIR/$CHOICE" > "$MAIN"
@@ -53,47 +67,50 @@ case $FEATURE in
         
     wallpaper)
         SCRIPT_DIR="$HOME/.config/hypr/scripts/wallpapers"
-        if [ "$MODE" == "random" ]; then
-            "$SCRIPT_DIR/set-random.sh" &
+
+	if [ ! -n "$2" ]; then        
+	    makenotif customize folder-pictures Wallpaper "Select a new background." true
+        fi
+
+	if [ "$CMD_CHOICE" == "random" ]; then
+	     "$SCRIPT_DIR/set-random.sh" &
+	elif [ -n "$CMD_CHOICE" ]; then
+             "$SCRIPT_DIR/set-wallpaper.sh" "$(basename "$CMD_CHOICE")" & 
         else
-            "$SCRIPT_DIR/set-wallpaper.sh" &
-            makenotif customize folder-pictures Wallpaper "Select a new background." true
+             "$SCRIPT_DIR/set-wallpaper.sh" &
         fi
         ;;
 
     launcher|panel|navbar)
         case $FEATURE in
             launcher)
-                NAME="Launcher"
-                ICON="preferences-desktop-theme"
-                MSG="Select a launcher skin."
-                DIR="$HOME/.config/rofi/skins"
-                CONFIG="$HOME/.config/rofi/config.rasi"
+                NAME="Launcher"; ICON="preferences-desktop-theme"; MSG="Select a launcher skin."
+                DIR="$HOME/.config/rofi/skins"; CONFIG="$HOME/.config/rofi/config.rasi"
                 ;;
             panel)
-                NAME="Control Centre"
-                ICON="preferences-desktop-theme"
-                MSG="Select Control Centre style."
-                DIR="$HOME/.config/swaync/skins"
-                CONFIG="$HOME/.config/swaync/config.json"
-                STYLE="$HOME/.config/swaync/style.css"
+                NAME="Control Centre"; ICON="preferences-desktop-theme"; MSG="Select Control Centre style."
+                DIR="$HOME/.config/swaync/skins"; CONFIG="$HOME/.config/swaync/config.json"; STYLE="$HOME/.config/swaync/style.css"
                 ;;
             navbar)
-                NAME="Navbar"
-                ICON="preferences-desktop-theme"
-                MSG="Select a navbar skin."
-                DIR="$HOME/.config/waybar/skins"
-                CONFIG="$HOME/.config/waybar/config.jsonc"
-                STYLE="$HOME/.config/waybar/style.css"
+                NAME="Navbar"; ICON="preferences-desktop-theme"; MSG="Select a navbar skin."
+                DIR="$HOME/.config/waybar/skins"; CONFIG="$HOME/.config/waybar/config.jsonc"; STYLE="$HOME/.config/waybar/style.css"
                 ;;
         esac
 
-        makenotif customize "$ICON" "$NAME" "$MSG" true
-
-        CHOICE=$(ls "$DIR" | rofi -dmenu -p "Select $NAME Skin")
+        if [ -n "$2" ]; then
+            CHOICE="$2"
+        else
+            makenotif customize "$ICON" "$NAME" "$MSG" true
+            CHOICE=$(ls "$DIR" | rofi -dmenu -p "Select $NAME Skin")
+        fi
 
         if [ -n "$CHOICE" ]; then
             PATH_SKIN="$DIR/$CHOICE"
+
+	    if [ ! -d "$PATH_SKIN" ]; then
+                echo "Error: Skin '$CHOICE' not found in $DIR"
+                exit 1
+            fi
 
             sed -i "\|^source = $DIR/|d" "$HYPR"
             echo "source = $PATH_SKIN/layerrule.conf" >> "$HYPR"

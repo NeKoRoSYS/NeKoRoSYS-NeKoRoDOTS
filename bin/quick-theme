@@ -1,0 +1,13 @@
+#!/bin/bash
+
+WALLPAPER=${1:-"random"}
+NAVBAR=${2:-"legacy"}
+LAUNCHER=${3:-"legacy"}
+LOCKSCREEN=${4:-"legacy.conf"}
+PANEL=${5:-legacy}
+
+customize wallpaper $WALLPAPER
+customize navbar $NAVBAR
+customize launcher $LAUNCHER
+customize lockscreen $LOCKSCREEN
+customize panel $PANEL
