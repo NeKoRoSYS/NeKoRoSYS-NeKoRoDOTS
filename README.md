@@ -73,13 +73,13 @@ The following are what NeKoRoSHELL currently offers:
   - Credits to [iyiolacak](https://github.com/iyiolacak/iyiolacak-swaync-config?tab=readme-ov-file), [justinmdickey](https://github.com/justinmdickey/publicdots/blob/main/.config/hypr/hyprlock.conf), and [mkhmtolzhas](https://github.com/mkhmtolzhas/mkhmtdots) for their amazing theming.
   - Switch to Dark and Light Mode
   - Select Waybar Skins
-  - Select Wofi Skins
+  - Select Rofi Skins
   - Select Hyprlock Layouts
   - Select SwayNC Styles
   - **Wallpaper Handling**
     - Supports both online (yes, online.) and offline image (via `swww`) and video (via `mpvpaper`) formats.
       - `mpvpaper` automatically stops if an app is on fullscreen mode to save CPU, RAM, or GPU space.
-      - Paste image or video links with valid file extensions in the wofi prompt and the download will automatically be processed, saved, and set as your new wallpaper.
+      - Paste image or video links with valid file extensions in the rofi prompt and the download will automatically be processed, saved, and set as your new wallpaper.
     - Border colors and UI elements have dynamic color schemes.
 <br>
 
@@ -149,7 +149,7 @@ You have two options:
 - Auto-pause animated wallpapers via [mpvpaper-stop](https://github.com/pvtoari/mpvpaper-stop) (dependencies: cmake, cjson)
   - Used at `set-wallpaper.sh` and `check-video.sh` in `~/.config/hypr/scripts/wallpapers/` to save CPU/RAM usage.
  
-- This rice uses `wofi` to run actions and apps.
+- This rice uses `rofi` to run actions and apps.
   - Some apps like `mpvpaper` needs to be ran using `prime-run` and `gamemoderun`
     - Install via `sudo pacman -S nvidia-prime gamemode`.
   - (Automatically provided by `pkglist.txt` if you used the `install.sh` bash file)
