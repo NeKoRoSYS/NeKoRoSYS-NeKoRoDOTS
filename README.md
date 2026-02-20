@@ -17,7 +17,7 @@
 
 </div>
 
-The best way to say "I use Arch btw 🤓" is if your desktop profile looks sleek and suave.
+The best way to say "I use Linux btw 🤓" is if your desktop profile looks sleek and suave.
 
 **NeKoRoSHELL** aims to provide an out-of-the-box, clean and reliable, generic, and modular framework that lets you easily customize your desktop experience with simple UI design philosophy in mind.
 <br>
@@ -37,13 +37,11 @@ NeKoRoSHELL focuses on simplicity and modularity.
 <br>
 
 The following are what NeKoRoSHELL currently offers:
-- **One-tap Installer Script**
+- **Distro-agnostic Installer Script**
   - Use `git clone https://github.com/NeKoRoSYS/NeKoRoSHELL`
   - Then `cd NeKoRoSHELL`
   - and finally, `bash install.sh` to install the dotfiles.
-    - You can freely customize `flatpak.txt` and `pkglist.txt` before running `install.sh`.
-    - The installer assumes you already installed `base-devel`, `git`, `yay`, `flatpak`.
-    - The installer assumes you have turned on mirror link downloads for `pacman`.
+    - You can freely customize `flatpak.txt` and `pkglist-DISTRO.txt` before running `install.sh`.
     - **The installer is safe.** It backs up your pre-existing .config folders. (If you have any)
     - The installer automatically handles assigning your monitors at `~/.config/hypr/configs/monitors.conf/` and replaces every occurence of `/home/nekorosys/` with your username for your own convenience.
    
