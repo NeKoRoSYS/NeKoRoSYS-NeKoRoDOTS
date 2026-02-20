@@ -1,15 +1,1 @@
-waybar
-rofi
-kitty
-dolphin
-grim
-slurp
-wl-clipboard
-cava
-btop
-fastfetch
-jq
-network-manager
-cargo
-build-essential
-pkg-config
+alsa-utils bluez bluez-tools blueman btop cava cmake dolphin fastfetch firefox flatpak gamemode git grim gstreamer1.0-pipewire hwinfo jq kitty less mako-notifier network-manager fonts-noto fonts-noto-cjk fonts-noto-color-emoji pavucontrol piper pipewire pipewire-audio-client-libraries power-profiles-daemon rofi smartmontools socat timeshift fonts-jetbrains-mono unzip vim waybar wayland-utils wireplumber wl-clipboard xdg-desktop-portal-gtk zsh cargo build-essential pkg-config golang
