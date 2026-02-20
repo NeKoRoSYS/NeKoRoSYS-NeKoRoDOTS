@@ -85,18 +85,18 @@ if [[ "$INSTALL_TYPE" == "compilation" ]]; then
                 exit 1
             fi
             
-            if [[ -f "pkglist-arch.txt" ]]; then
-                $AUR_HELPER -S --needed --noconfirm - < pkglist-arch.txt
+            if [[ -f "packages/pkglist-arch.txt" ]]; then
+                $AUR_HELPER -S --needed --noconfirm - < packages/pkglist-arch.txt
             else
-                echo -e "${RED}Warning: pkglist-arch.txt not found!${NC}"
+                echo -e "${RED}Warning: packages/pkglist-arch.txt not found!${NC}"
             fi
             ;;
 
         fedora)
-            if [[ -f "pkglist-fedora.txt" ]]; then
-                grep -vE '^\s*#|^\s*$' pkglist-fedora.txt | xargs sudo dnf install -y
+            if [[ -f "packages/pkglist-fedora.txt" ]]; then
+                grep -vE '^\s*#|^\s*$' packages/pkglist-fedora.txt | xargs sudo dnf install -y
             else
-                echo -e "${RED}Warning: pkglist-fedora.txt not found!${NC}"
+                echo -e "${RED}Warning: packages/pkglist-fedora.txt not found!${NC}"
             fi
             ;;
 
@@ -104,19 +104,19 @@ if [[ "$INSTALL_TYPE" == "compilation" ]]; then
             echo -e "${RED}WARNING: Debian/Ubuntu do not provide Hyprland or its ecosystem natively.${NC}"
             echo -e "${RED}Ensure you have installed them via a 3rd party PPA/script first.${NC}"
             sleep 3
-            if [[ -f "pkglist-debian.txt" ]]; then
+            if [[ -f "packages/pkglist-debian.txt" ]]; then
                 sudo apt-get update
-                grep -vE '^\s*#|^\s*$' pkglist-debian.txt | xargs sudo apt-get install -y
+                grep -vE '^\s*#|^\s*$' packages/pkglist-debian.txt | xargs sudo apt-get install -y
             else
-                echo -e "${RED}Warning: pkglist-debian.txt not found!${NC}"
+                echo -e "${RED}Warning: packages/pkglist-debian.txt not found!${NC}"
             fi
             ;;
             
         gentoo)
-            if [[ -f "pkglist-gentoo.txt" ]]; then
-                grep -vE '^\s*#|^\s*$' pkglist-gentoo.txt | xargs sudo emerge -av --noreplace
+            if [[ -f "packages/pkglist-gentoo.txt" ]]; then
+                grep -vE '^\s*#|^\s*$' packages/pkglist-gentoo.txt | xargs sudo emerge -av --noreplace
             else
-                echo -e "${RED}Warning: pkglist-gentoo.txt not found!${NC}"
+                echo -e "${RED}Warning: packages/pkglist-gentoo.txt not found!${NC}"
             fi
             ;;
 
