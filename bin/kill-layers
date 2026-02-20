@@ -1,0 +1,4 @@
+killall rofi || true
+killall slurp || true
+killall grim || true
+killall hyprshot || true
