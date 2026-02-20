@@ -1,0 +1,80 @@
+@import "/home/nekorosys/.cache/wallust/colors-rofi.rasi"
+
+* {
+    font: "JetBrains Mono 12";
+    background-color: transparent;
+}
+
+window {
+    width: 550px;
+    border: 2px;
+    border-color: @color13;
+    border-radius: 10px;
+    background-color: @background-window;
+    location: center;
+    anchor: center;
+}
+
+mainbox {
+    padding: 10px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    margin: 0px;
+    padding: 6px;
+    border: 2px;
+    border-radius: 5px;
+    border-color: @color13;
+    background-color: @background-input;
+    children: [ entry ];
+}
+
+entry {
+    text-color: @text;
+    placeholder: "Search...";
+    placeholder-color: @text;
+}
+
+listview {
+    margin: 10px 2px 0px 2px;
+    lines: 8;
+    fixed-height: true;
+    border: 0px;
+}
+
+element {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+element-icon {
+    size: 3ch;
+    padding: 1px 5px 1px 1px;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color: @text;
+}
+
+element-text {
+    vertical-align: 0.5;
+    text-color: @text;
+}
+
+element selected.normal {
+    background-color: @color5; 
+    border: 0px 0px 2px 0px;
+    border-color: @color13;    
+}
+
+element-text selected.normal {
+    font: "JetBrains Mono Bold 14";
+    text-color: #ffffff;       
+}
+
+element hover {
+    background-color: @color13;
+}

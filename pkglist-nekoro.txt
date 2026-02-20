@@ -119,7 +119,6 @@ wine
 wireplumber
 wl-clipboard
 wlogout
-wofi
 wpa_supplicant
 xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland

@@ -1,0 +1,8 @@
+configuration {
+    display-drun: "Apps";
+    drun-display-format: "{name}";
+    disable-history: false;
+    fullscreen: false;
+    hide-scrollbar: true;
+    sidebar-mode: false;
+}

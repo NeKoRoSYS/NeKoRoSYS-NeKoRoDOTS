@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# Close wofi if it's open (e.g. if the wallpaper script uses wofi to select)
-pkill -x wofi
+pkill -x rofi
 
 MODE=$1
 SCRIPT_DIR="$HOME/.config/hypr/scripts/wallpapers"

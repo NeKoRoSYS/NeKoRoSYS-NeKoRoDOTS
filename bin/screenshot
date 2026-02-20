@@ -14,7 +14,7 @@ else
     hyprshot -m $MODE --clipboard-only -s
 fi
 
-pkill wofi
+pkill rofi
 
 wl-paste > /tmp/screenshot.png && sleep 1
 makenotif hyprshot "/tmp/screenshot.png" Hyprshot "Captured $MODE to clipboard!" true camera-shutter.oga

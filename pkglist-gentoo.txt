@@ -36,6 +36,7 @@ media-sound/pavucontrol
 app-misc/piper
 media-video/pipewire
 sys-power/power-profiles-daemon
+gui-apps/rofi
 dev-lang/rust
 sys-apps/smartmontools
 net-misc/socat
@@ -51,7 +52,6 @@ gui-apps/waybar
 dev-util/wayland-utils
 media-video/wireplumber
 gui-apps/wl-clipboard
-gui-apps/wofi
 sys-apps/xdg-desktop-portal-gtk
 sys-apps/xdg-desktop-portal-hyprland
 app-shells/zsh

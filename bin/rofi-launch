@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pkill -x wofi
+pkill -x rofi
 
 MODE=$1
 
@@ -9,19 +9,19 @@ case $MODE in
     run)
         TITLE="Run Command"
         MSG="Type a command to execute."
-        CMD=(wofi --show run)
+	CMD=(rofi -show run)
         ;;
     game)
         TITLE="Game Mode"
         MSG="Select an app with Gamemode."
-        CMD=(gamemoderun wofi --show drun)
+        CMD=(gamemoderun rofi -show drun)
         ;;
     drun)
         TITLE="Select App"
         MSG="Select an app to run."
-        CMD=(wofi --show drun)
+	CMD=(rofi -show drun -show-icons)
         ;;
 esac
 
 "${CMD[@]}" &
-makenotif wofi system-run "$TITLE" "$MSG" true
+makenotif rofi system-run "$TITLE" "$MSG" true

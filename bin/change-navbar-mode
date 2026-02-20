@@ -7,7 +7,7 @@ STATIC="Static (Always Visible)"
 DYNAMIC="Dynamic (Smart Auto-hide)"
 HOVER="Hover (Mouse Reveal)"
 
-CHOICE=$(echo -e "$STATIC\n$DYNAMIC\n$HOVER" | wofi --dmenu --prompt "Select Navbar Mode" --lines 3 --width 400)
+CHOICE=$(echo -e "$STATIC\n$DYNAMIC\n$HOVER" | rofi -dmenu -p "Select Navbar Mode" -l 3)
 
 if [ -z "$CHOICE" ]; then
     exit 0

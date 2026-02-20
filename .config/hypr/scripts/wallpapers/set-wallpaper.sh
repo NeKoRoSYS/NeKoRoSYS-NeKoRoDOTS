@@ -30,32 +30,37 @@ gen_thumb() {
 if [ -n "${1:-}" ]; then
     SELECTED_FILE=$(basename "$1")
 else
-    find "$WALL_DIR" -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.mp4" -o -iname "*.mkv" -o -iname "*.webm" \) -print0 \
-    | xargs -0 -P4 -n1 -I {} bash -c '
-        FILE_PATH="$1"
-        FILENAME=$(basename "$FILE_PATH")
-        THUMB_CACHE="$2"
-        OUT="$THUMB_CACHE/${FILENAME}.jpg"
-        
-        [ -f "$OUT" ] && exit 0
-        
-        case "${FILENAME##*.}" in
-            mp4|mkv|webm|MP4|MKV|WEBM)
-                ffmpeg -y -discard nokey -i "$FILE_PATH" -ss 00:00:02 -frames:v 1 -vf "scale=200:-1" "$OUT" > /dev/null 2>&1 || true
-                ;;
-            png|jpg|jpeg|PNG|JPG|JPEG)
-                magick "$FILE_PATH" -thumbnail 200x "$OUT" > /dev/null 2>&1 || true
-                ;;
-        esac
-    ' _ "{}" "$THUMB_CACHE" || true
+    shopt -s nocaseglob nullglob
 
-    FILE_LIST=$(find "$WALL_DIR" -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.mp4" -o -iname "*.mkv" -o -iname "*.webm" \) -printf "img:$THUMB_CACHE/%f.jpg:text:%f\n")
+    get_wallpapers() {
+        for file in "$WALL_DIR"/*.{jpg,jpeg,png,mp4,mkv,webm}; do
+            FILENAME="${file##*/}"
+            THUMB_PATH="$THUMB_CACHE/${FILENAME}.jpg"
+            
+            if [[ ! -f "$THUMB_PATH" ]]; then
+                gen_thumb "$file"
+            fi
+            
+            echo -en "${FILENAME}\0icon\x1f${THUMB_PATH}\n"
+        done
+    }
 
-    if RAW_SELECTION=$(echo "$FILE_LIST" | wofi --dmenu --allow-images --prompt "Select wallpaper"); then
-        SELECTED_FILE=$(echo "$RAW_SELECTION" | sed 's/^.*:text://')
+    if RAW_SELECTION=$(get_wallpapers | rofi -dmenu \
+        -i \
+        -p "Select Wallpaper" \-show-icons \
+        -theme-str 'window { width: 800px; }' \
+	-theme-str 'listview { columns: 4; lines: 3; spacing: 15px; fixed-columns: true; flow: horizontal; }' \
+        -theme-str 'element { orientation: vertical; padding: 10px; border-radius: 10px; }' \
+        -theme-str 'element-icon { size: 120px; horizontal-align: 0.5; }' \
+        -theme-str 'element-text { horizontal-align: 0.5; padding: 5px 0px 0px 0px; }'); then
+        
+        SELECTED_FILE="$RAW_SELECTION"
     else
+        shopt -u nocaseglob nullglob
         exit 0
     fi
+    
+    shopt -u nocaseglob nullglob
 fi
 
 [ -z "$SELECTED_FILE" ] && exit 0

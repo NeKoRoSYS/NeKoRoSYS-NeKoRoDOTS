@@ -57,16 +57,16 @@ backup_config() {
 
 backup_config ~/.config/btop
 backup_config ~/.config/cava
-backup_config ~/.config/mako
 backup_config ~/.config/fastfetch
-backup_config ~/.config/kitty
-backup_config ~/.config/systemd
-backup_config ~/.config/wallpapers
 backup_config ~/.config/hypr
 backup_config ~/.config/hypremoji
+backup_config ~/.config/kitty
+backup_config ~/.config/rofi
 backup_config ~/.config/swaync
+backup_config ~/.config/systemd
+backup_config ~/.config/wallpapers
+backup_config ~/.config/wallust
 backup_config ~/.config/waybar
-backup_config ~/.config/wofi
 
 echo -e "${BLUE}Deploying configuration files...${NC}"
 mkdir -p ~/.config
@@ -97,12 +97,12 @@ REPLACE="/home/$USER"
 echo -e "${BLUE}Replacing $SEARCH with $REPLACE in config files...${NC}"
 find "$HOME/.config" -type f -print0 2>/dev/null | xargs -0 -r sed -i "s|$SEARCH|$REPLACE|g" 2>/dev/null
 
-if [command -v "bash" >/dev/null 2>&1]; then
+if command -v "bash" >/dev/null 2>&1; then
     echo "bash is installed. Appending paths..."
     grep -v -x -f ~/.bashrc .bashrc >> ~/.bashrc
 fi
 
-if [command -v "zsh" >/dev/null 2>&1]; then
+if command -v "zsh" >/dev/null 2>&1; then
     echo "zsh is installed. Appending paths..."
     grep -v -x -f ~/.zshrc .zshrc >> ~/.zshrc
 fi

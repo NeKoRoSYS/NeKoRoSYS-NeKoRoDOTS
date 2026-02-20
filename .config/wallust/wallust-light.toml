@@ -10,3 +10,4 @@ saturation = 10
 hyprland = { src = "colors-hyprland.conf", dst = "~/.cache/wallust/colors-hyprland-raw.conf" } 
 kitty = { src = "colors-kitty.conf", dst = "~/.cache/wallust/colors-kitty.conf" } 
 waybar = { src = "colors-waybar.css", dst = "~/.cache/wallust/colors-waybar.css" }
+rofi = { src = "colors-rofi.rasi", dst = "~/.cache/wallust/colors-rofi.rasi" }
