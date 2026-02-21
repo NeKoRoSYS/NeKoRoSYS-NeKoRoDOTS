@@ -23,7 +23,7 @@ The directory structure of Skins are always `.config/PACKAGE/skins/SKIN/CONTENT`
 You usually have two options when making a Skin:
 - Install someone else's packge design/setup and then manually adjust its files to follow the directory and file organization schematics; or
 - Make your own. ¯\_(ツ)_/¯
-  - Make sure it supports the Dark and Light contrast modes by importing from wallust: `/home/username/.cache/wallust/your-wallust-colors.extension`
+  - You don't have to, but you can make sure it supports the Dark and Light contrast modes by importing from wallust: `/home/username/.cache/wallust/your-wallust-colors.extension`
 <br>
 <br>
 
