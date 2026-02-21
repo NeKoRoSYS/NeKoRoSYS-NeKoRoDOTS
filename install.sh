@@ -104,6 +104,17 @@ if [[ "$INSTALL_TYPE" == "compilation" ]]; then
                 echo -e "${RED}Warning: packages/pkglist-fedora.txt not found!${NC}"
             fi
             ;;
+fedora)
+            if [[ -f "packages/pkglist-fedora.txt" ]]; then
+                packages=$(sed 's/["'\'']//g' packages/pkglist-fedora.txt | tr ' ' '\n' | grep -v -E '^\s*$|^#')
+                for pkg in $packages; do
+                    echo -e "${BLUE}Installing: $pkg${NC}"
+                    sudo dnf install -y "$pkg" || echo -e "${RED}Failed to install $pkg. Skipping...${NC}"
+                done
+            else
+                echo -e "${RED}Warning: packages/pkglist-fedora.txt not found!${NC}"
+            fi
+            ;;
 
         ubuntu|debian)
             echo -e "${RED}WARNING: Debian/Ubuntu do not provide Hyprland or its ecosystem natively.${NC}"
@@ -111,7 +122,11 @@ if [[ "$INSTALL_TYPE" == "compilation" ]]; then
             sleep 3
             if [[ -f "packages/pkglist-debian.txt" ]]; then
                 sudo apt-get update
-                grep -vE '^\s*#|^\s*$' packages/pkglist-debian.txt | xargs sudo apt-get install -y
+                packages=$(sed 's/["'\'']//g' packages/pkglist-debian.txt | tr ' ' '\n' | grep -v -E '^\s*$|^#')
+                for pkg in $packages; do
+                    echo -e "${BLUE}Installing: $pkg${NC}"
+                    sudo apt-get install -y "$pkg" || echo -e "${RED}Failed to install $pkg. Skipping...${NC}"
+                done
             else
                 echo -e "${RED}Warning: packages/pkglist-debian.txt not found!${NC}"
             fi
@@ -119,7 +134,8 @@ if [[ "$INSTALL_TYPE" == "compilation" ]]; then
             
         gentoo)
             if [[ -f "packages/pkglist-gentoo.txt" ]]; then
-                grep -vE '^\s*#|^\s*$' packages/pkglist-gentoo.txt | xargs sudo emerge -av --noreplace
+                packages=$(sed 's/["'\'']//g' packages/pkglist-gentoo.txt | tr ' ' '\n' | grep -v -E '^\s*$|^#')
+                sudo emerge -av --noreplace $packages
             else
                 echo -e "${RED}Warning: packages/pkglist-gentoo.txt not found!${NC}"
             fi
