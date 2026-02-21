@@ -37,6 +37,7 @@ NeKoRoSHELL focuses on simplicity and modularity.
 
 The following are what NeKoRoSHELL currently offers:
 - **Distro-agnostic Installer Script**
+  - Use NeKoRoSHELL in any **supported** distro!
   - Use `git clone https://github.com/NeKoRoSYS/NeKoRoSHELL`
   - Then `cd NeKoRoSHELL`
   - and finally, `bash install.sh` to install the dotfiles.
@@ -77,7 +78,7 @@ The following are what NeKoRoSHELL currently offers:
       - Supports both online and offline image (via `swww`) and video (via `mpvpaper`) formats.
         - `mpvpaper` automatically stops if an app is on fullscreen mode to save CPU/RAM and GPU space.
         - Paste image or video links with valid file extensions in the rofi prompt and the download will automatically be processed, saved, and set as your new wallpaper.
-      - Border colors and UI elements have dynamic color schemes.
+      - Uses `wallust` to dynamically update border and UI colors based on the percieved colors of from the wallpaper.
     - Make and select your own Themes that automatically apply skins and wallpapers.
     - For more information, see [THEMING](THEMING.md)
 <br>
