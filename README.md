@@ -62,7 +62,7 @@ The following are what NeKoRoSHELL currently offers:
   - Uses `SwayNC` for a dedicated notification center with customizable buttons and options.
  
 - **Smart Navbar**
-  - Uses bash script wrappers for `waybar` for the modes: Static, Dynamic, and Hover.
+  - Uses C++ wrappers for `waybar` to toggle visibility: Static, Dynamic, and Hover.
 <p align="center">
   <img src="https://github.com/NeKoRoSYS/NeKoRoSHELL/blob/main/showcase/navbar-modes.gif" alt="Navbar Demo" />
 </p>
