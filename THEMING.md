@@ -18,6 +18,8 @@ Depending on the package, the relevant files that make the Skins system work may
   - `config.rasi` imports from the active skin.
 <br>
 
+The directory structure of Skins are always `.config/PACKAGE/skins/SKIN/CONTENT`.
+
 You usually have two options when making a Skin:
 - Install someone else's packge design/setup and then manually adjust its files to follow the directory and file organization schematics; or
 - Make your own. ¯\_(ツ)_/¯
