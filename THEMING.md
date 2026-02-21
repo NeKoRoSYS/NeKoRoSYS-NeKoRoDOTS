@@ -14,6 +14,9 @@ Wallpapers are found in `.config/wallpapers`.
 Wallpapers are cached in `/home/USERNAME/.cache/wallpaper-thumbs/`
 - This is an optimization method to make sure the launcher (rofi) loads the images in a list faster. It also helps with decreasing the processing time of the `apply-colors.sh` bash script.
 
+Image wallpapers are managed by swww, while animated wallpapers are managed by mpvpaper.
+<br>
+
 ### Making a Skin
 
 The directory structure of Skins are always `.config/PACKAGE/skins/SKIN/CONTENT`.
