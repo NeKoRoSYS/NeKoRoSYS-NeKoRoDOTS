@@ -12,6 +12,19 @@ echo -e "# ======================================================= #"
 echo -e "#            NeKoRoSHELL Installation Wizard              #"
 echo -e "# ======================================================= #\n "
 
+# ==============================================================================
+# ACTIVE BIN DIRECTORY DETECTION
+# ==============================================================================
+echo -e "${BLUE}Detecting active user bin directory...${NC}"
+if [[ -d "$HOME/.local/bin" ]]; then
+    USER_BIN_DIR="$HOME/.local/bin"
+elif [[ -d "$HOME/bin" ]]; then
+    USER_BIN_DIR="$HOME/bin"
+else
+    USER_BIN_DIR="$HOME/.local/bin"
+fi
+echo -e "${GREEN}Using $USER_BIN_DIR as the target bin directory.${NC}\n"
+
 echo -e "${BLUE}Please choose your installation type:${NC}"
 echo -e "  ${GREEN}Minimal${NC}     - Backup existing .config files, copy the new .config files, and replace the hardcoded directories, but don't install dependencies."
 echo -e "  ${GREEN}Compilation${NC} - Backup existing .config files, copy the new .config files over, replace the hardcoded directories, and install every dependency.\n"
@@ -98,13 +111,6 @@ if [[ "$INSTALL_TYPE" == "compilation" ]]; then
             ;;
 
         fedora)
-            if [[ -f "packages/pkglist-fedora.txt" ]]; then
-                grep -vE '^\s*#|^\s*$' packages/pkglist-fedora.txt | xargs sudo dnf install -y
-            else
-                echo -e "${RED}Warning: packages/pkglist-fedora.txt not found!${NC}"
-            fi
-            ;;
-fedora)
             if [[ -f "packages/pkglist-fedora.txt" ]]; then
                 packages=$(sed 's/["'\'']//g' packages/pkglist-fedora.txt | tr ' ' '\n' | grep -v -E '^\s*$|^#')
                 for pkg in $packages; do
@@ -271,7 +277,7 @@ else
     done
 fi
 
-MONITOR_COUNT=${#MONITOR_LIST[@]}\
+MONITOR_COUNT=${#MONITOR_LIST[@]}
 
 if [[ "$MONITOR_COUNT" -gt 0 ]]; then
     PRIMARY_MONITOR=${MONITOR_LIST[0]}
@@ -313,11 +319,13 @@ inject_shell_config() {
         go_bin_path="$HOME/go/bin"
     fi
     
+    local export_bin_dir="${USER_BIN_DIR/$HOME/\$HOME}"
+
     if [[ -f "$shell_rc" ]]; then
         sed -i '/# --- NeKoRoSHELL START ---/,/# --- NeKoRoSHELL END ---/d' "$shell_rc"
         echo -e "\n# --- NeKoRoSHELL START ---" >> "$shell_rc"
         [[ -f "$source_rc" ]] && cat "$source_rc" >> "$shell_rc"
-        echo "export PATH=\"\$HOME/bin:\$HOME/.local/bin:\$HOME/.cargo/bin:$go_bin_path:\$PATH\"" >> "$shell_rc"
+        echo "export PATH=\"$export_bin_dir:\$HOME/.cargo/bin:$go_bin_path:\$PATH\"" >> "$shell_rc"
         echo -e "# --- NeKoRoSHELL END ---" >> "$shell_rc"
         echo -e "${GREEN}Updated $shell_rc${NC}"
     fi
@@ -329,7 +337,12 @@ inject_shell_config "$HOME/.zshrc" ".zshrc"
 [[ -f .p10k.zsh ]] && cp .p10k.zsh "$HOME/"
 [[ -f .face.icon ]] && cp .face.icon "$HOME/"
 [[ -f change-avatar.sh ]] && cp change-avatar.sh "$HOME/"
-[[ -d bin ]] && cp -r bin "$HOME/"
+
+if [[ -d bin ]]; then
+    echo -e "${BLUE}Copying scripts to $USER_BIN_DIR...${NC}"
+    mkdir -p "$USER_BIN_DIR"
+    cp -r bin/* "$USER_BIN_DIR/" 2>/dev/null
+fi
 
 # ==============================================================================
 # DOWNLOADING & COMPILING (Compilation Mode Only)
@@ -338,9 +351,9 @@ inject_shell_config "$HOME/.zshrc" ".zshrc"
 if [[ "$INSTALL_TYPE" == "compilation" ]]; then
     if ! command -v hyprshot &> /dev/null; then
         echo -e "${BLUE}Downloading hyprshot...${NC}"
-        mkdir -p "$HOME/bin"
-        curl -sLo "$HOME/bin/hyprshot" https://raw.githubusercontent.com/Gustash/Hyprshot/main/hyprshot
-        chmod +x "$HOME/bin/hyprshot"
+        mkdir -p "$USER_BIN_DIR"
+        curl -sLo "$USER_BIN_DIR/hyprshot" https://raw.githubusercontent.com/Gustash/Hyprshot/main/hyprshot
+        chmod +x "$USER_BIN_DIR/hyprshot"
     fi
 
     if [[ ! -d "$HOME/powerlevel10k" ]]; then
@@ -362,19 +375,19 @@ if [[ "$INSTALL_TYPE" == "compilation" ]]; then
             echo -e "${RED}Please install the corresponding -dev / -devel packages. Compilation aborted.${NC}"
         else
             echo -e "${BLUE}Compiling C++ Daemons...${NC}"
-            mkdir -p "$HOME/bin"
+            mkdir -p "$USER_BIN_DIR"
             
             LIBS=$(pkg-config --cflags --libs $REQUIRED_LIBS)
             
             if [[ -f "bin/source/navbar-hover.cpp" ]]; then
-                g++ -O3 -o "$HOME/bin/navbar-hover" bin/source/navbar-hover.cpp $LIBS
+                g++ -O3 -o "$USER_BIN_DIR/navbar-hover" bin/source/navbar-hover.cpp $LIBS
                 echo -e "${GREEN}Successfully compiled navbar-hover.${NC}"
             else
                 echo -e "${RED}Warning: bin/source/navbar-hover.cpp not found.${NC}"
             fi
             
             if [[ -f "bin/source/navbar-watcher.cpp" ]]; then
-                g++ -O3 -o "$HOME/bin/navbar-watcher" bin/source/navbar-watcher.cpp $LIBS
+                g++ -O3 -o "$USER_BIN_DIR/navbar-watcher" bin/source/navbar-watcher.cpp $LIBS
                 echo -e "${GREEN}Successfully compiled navbar-watcher.${NC}"
             else
                 echo -e "${RED}Warning: bin/source/navbar-watcher.cpp not found.${NC}"
@@ -389,8 +402,8 @@ fi
 
 echo -e "${BLUE}Setting script permissions...${NC}"
 find "$HOME/.config/" -type f -name "*.sh" -exec chmod +x {} + 2>/dev/null
-if [[ -d "$HOME/bin" ]]; then
-    find "$HOME/bin/" -type f -exec chmod +x {} + 2>/dev/null
+if [[ -d "$USER_BIN_DIR" ]]; then
+    find "$USER_BIN_DIR/" -type f -exec chmod +x {} + 2>/dev/null
 fi
 
 if command -v systemctl >/dev/null 2>&1; then
